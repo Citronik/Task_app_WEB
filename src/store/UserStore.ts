@@ -13,6 +13,7 @@ export const useUserStore = defineStore("user", {
   actions: {
     async fetchUser() {
       console.log('getting user');
+
       try {
         console.log(this.token);
         apiClient.defaults.headers.common['Authorization'] = `Bearer ${this.token}`;
@@ -66,18 +67,19 @@ export const useUserStore = defineStore("user", {
       //return res.data;
     },
     async signOut() {
-      console.log('logout');
+      console.log('logout', process.env);
       apiClient.defaults.headers.common['Authorization'] = `Bearer ` + this.token;
       this.err = null;
       const res = await apiClient.post('/users/logout');
       console.log(res);
       if (!this.err) {
+        this.user = null;
+        this.token = null;
+        this.profile = null;
+        apiClient.defaults.headers.common['Authorization'] = ``;
         localStorage.removeItem('userStore');
         return true;
       }
-      this.user = null;
-      this.token = null;
-      this.profile = null;
       return false;
     },
     initialize() {

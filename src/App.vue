@@ -15,6 +15,7 @@
   import TheNavigator from '@/components/TheNavigator.vue'
   import TheFooterVue from '@/components/TheFooter.vue'
   import { useUserStore } from '@/store/UserStore'
+
   const userStore = useUserStore();
 </script>
 

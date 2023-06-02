@@ -41,7 +41,7 @@
 
 <script>
   import { useUserStore } from "../store/UserStore";
-export default {
+export default{
   setup() {
     const userStore = useUserStore();
     userStore.initialize();
@@ -56,8 +56,10 @@ export default {
     };
   },
   mounted() {
+    this.userStore.fetchUser();
+    this.userStore.fetchProfile();
     this.username = this.userStore.user?.username;
-    this.avatar = "http://127.0.0.1:3333/uploads/" + this.userStore.profile?.avatar.file.name;
+    this.avatar = this.userStore.profile?.avatar ? "http://127.0.0.1:3333/uploads/" + this.userStore.profile?.avatar.file.name : "../public/anonymous-avatar-icon-25.jpg";
   },
   methods: {
     async logout() {
