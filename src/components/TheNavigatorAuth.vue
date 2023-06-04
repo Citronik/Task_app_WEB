@@ -59,7 +59,7 @@ export default{
     this.userStore.fetchUser();
     this.userStore.fetchProfile();
     this.username = this.userStore.user?.username;
-    this.avatar = this.userStore.profile?.avatar ? "http://127.0.0.1:3333/uploads/" + this.userStore.profile?.avatar.file.name : "../public/anonymous-avatar-icon-25.jpg";
+    this.avatar = this.userStore.profile?.avatar ? "http://127.0.0.1:3333/uploads/" + this.userStore.profile?.avatar.file.name : "/anonymous-avatar-icon-25.jpg";
   },
   methods: {
     async logout() {
