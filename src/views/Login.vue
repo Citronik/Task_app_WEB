@@ -46,14 +46,14 @@
   </v-sheet>
 </template>
 
-<script>
+<script lang="ts">
 import { useUserStore } from "../store/UserStore";
   export default {
     setup() {
-    const userStore = useUserStore();
-    userStore.initialize();
-    return { userStore };
-  },
+      const userStore = useUserStore();
+      userStore.initialize();
+      return { userStore };
+    },
     data: () => ({
       loginForm: false,
       username: null,
@@ -63,7 +63,7 @@ import { useUserStore } from "../store/UserStore";
       show2: true,
       loading: false,
       rules: {
-          required: value => !!value || 'Required.',
+          required: value  => !!value || 'Required.',
           min: v => v.length >= 8 || 'Min 8 characters',
           emailMatch: () => (`The email and password you entered don't match`),
           email: value => {
@@ -81,12 +81,20 @@ import { useUserStore } from "../store/UserStore";
 
         setTimeout(() => (this.loading = false), 2000)
         const res = await this.login();
-        const profileRes = await this.profile();
-        if (!res.error && !profileRes.error) {
+        //const profileRes = await this.profile();
+        if (res.error) {
+          //notyfy user about error
+
+        } else {
+          // this.$store.commit("setSnackbar", {
+          //   text: "Login successful",
+          //   color: "success",
+          // });
+          // success
           this.$router.push("/");
         }
       },
-      required (v) {
+      required (v: any) {
         return !!v || 'Field is required'
       },
       async login() {
@@ -95,7 +103,7 @@ import { useUserStore } from "../store/UserStore";
           email: this.email,
           password: this.password
         };
-        var res = await this.userStore.signIn( JSON.stringify(credentials) );
+        var res = await this.userStore.signIn( credentials );
         return res;
       },
       async profile() {

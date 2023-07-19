@@ -7,23 +7,22 @@ export const useUserStore = defineStore("user", {
     user: null,
     profile: null,
     err: null,
-    token: null,
   }),
 
   actions: {
-    async fetchUser() {
+    async fetchUser() : Promise<any> {
       console.log('getting user');
 
       try {
-        console.log(this.token);
         const res = await apiClient.get('/users/me');
         this.user = res.data.data;
         return this.user;
       } catch (error: any) {
         this.err = error.message;
+        return {res: null, err: error.message};
       }
     },
-    async fetchProfile() {
+    async fetchProfile() : Promise<any>{
       console.log('getting profile');
       try {
         this.err = null;
@@ -35,9 +34,10 @@ export const useUserStore = defineStore("user", {
         return this.user;
       } catch (error: any) {
         this.err = error.message;
+        return {res: null, err: error.message};
       }
     },
-    async signUp(user:JSON) {
+    async signUp(user:JSON) : Promise<any>{
       try {
         this.err = null;
         const res = await apiClient.post('/users/register', user);
@@ -46,32 +46,69 @@ export const useUserStore = defineStore("user", {
         return this.user;
       } catch (error: any) {
         this.err = error.message;
+        console.log('err: ',  this.err);
+        return {res: null, err: error.message};
       }
     },
-    async signIn(credentials:JSON) {
+    async signIn(credentials:JSON) : Promise<any> {
       console.log('logging');
       this.err = null;
-      const res = await apiClient.post('/users/login', credentials);
-      this.user = res.data.data.user;
-      return this.user;//await this.fetchUser();
-    },
-    async signOut() {
-      console.log('logout', process.env);
-      const res = await apiClient.post('/users/logout');
-      console.log(res);
-      if (!this.err) {
+      try {
+        const res = await apiClient.post('/users/login', credentials);
+        this.user = res.data.data.user;
+        if (this.user) {  // if user is logged in
+          localStorage.setItem('userStore', JSON.stringify(this.$state));
+          return res;
+        }
+        return {res: null, err: res.data.message};
+      } catch (error: any) {
+        this.err = error.message;
+        console.log('err: ',  this.err);
         this.user = null;
-        this.token = null;
+        this.profile = null;
+        localStorage.removeItem('userStore');
+        return {res: null, err: error.message};
+      }
+    },
+    async signOut() : Promise<boolean> {
+      console.log('logout');
+      this.err = null;
+      try {
+        await apiClient.post('/users/logout');
+        this.user = null;
         this.profile = null;
         localStorage.removeItem('userStore');
         return true;
-      }
-      return false;
+      } catch (error: any) {
+        this.err = error.message;
+        console.log('err: ',  this.err);
+        return false;
+        }
     },
-    initialize() {
+    async isValidSession(): Promise<boolean> {
+      try {
+        const res = await apiClient.get('/users/me');
+        this.user = res.data.data;
+        return true;
+      } catch (error: any) {
+        if (error.response && error.response.status === 401) {
+          this.signOut();
+          return false;
+        } else {
+          this.err = error.message;
+          console.log('err: ', this.err);
+          return false;
+        }
+      }
+    },
+    async initialize() {
       const storedState = localStorage.getItem('userStore')
-      if (storedState) {
+      if (storedState && await this.isValidSession()) {
         this.$patch(JSON.parse(storedState))
+      } else{
+        this.user = null;
+        this.profile = null;
+        localStorage.removeItem('userStore');
       }
     },
   },

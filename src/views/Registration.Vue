@@ -123,7 +123,7 @@ import { useUserStore } from "../store/UserStore";
         if (!this.regForm) return
 
         this.loading = true
-
+        console.log('user has submited the form');
         setTimeout(() => (this.loading = false), 2000)
         const res = await this.register();
         if (!res.error) {
@@ -134,15 +134,19 @@ import { useUserStore } from "../store/UserStore";
         return !!v || 'Field is required'
       },
       async register() {
+        console.log('register was called');
         const credentials = {
           username: this.username,
+          first_name: this.first,
+          last_name: this.last,
           email: this.email,
-          password: this.password
+          password: this.password,
         };
-        var res = await this.userStore.signIn( JSON.stringify(credentials) );
+        console.log(JSON.stringify(credentials));
+        var res = await this.userStore.signUp( JSON.stringify(credentials) );
         return res;
       },
-      async profile() {
+      async getProfile() {
         var res = await this.userStore.fetchProfile();
         return res;
       },
