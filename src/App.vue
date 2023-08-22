@@ -11,9 +11,9 @@
 </template>
 
 <script setup lang="ts">
-  import TheNavigatorAuth from '@/components/TheNavigatorAuth.vue'
-  import TheNavigator from '@/components/TheNavigator.vue'
-  import TheFooterVue from '@/components/TheFooter.vue'
+  import TheNavigatorAuth from '@/components/Main/TheNavigatorAuth.vue'
+  import TheNavigator from '@/components/Main/TheNavigator.vue'
+  import TheFooterVue from '@/components/Main/TheFooter.vue'
   import TheAlertManager from '@/components/Alerts/TheAlertManager.vue'
   import { useUserStore } from '@/store/UserStore'
 

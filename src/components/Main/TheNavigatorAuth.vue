@@ -76,9 +76,10 @@
 </template>
 
 <script lang="ts">
-  import { useUserStore } from "../store/UserStore";
-  import { useRoomStore } from "../store/RoomStore";
+  import { useUserStore } from "../../store/UserStore";
+  import { useRoomStore } from "../../store/RoomStore";
   import { useAlertStore } from '@/store/AlertStore';
+  import { Room } from '@/models/Room';
 export default{
   setup() {
     const userStore = useUserStore();
@@ -93,8 +94,7 @@ export default{
       avatar: "",
       drawer: true,
       rail: false,
-      rooms: [],
-      rooms_Visible: false,
+      rooms: [] as Room[],
       open: ["Rooms"],
     };
   },
@@ -141,8 +141,9 @@ export default{
 
       //this.$router.push({ name: "rooms" });
     },
-    enterRoom(room) {
+    enterRoom(room : Room) {
       // Handle navigation to the specific room here
+      this.$router.push({ name: "room", params: { id: room.id } });
     },
     createRoom() {
       // Handle navigation to the create room here

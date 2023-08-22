@@ -35,8 +35,8 @@
 </template>
 
 <script lang="ts">
-import { useUserStore } from "../store/UserStore";
-import TheSearchBar from './TheSearchBar.vue';
+import { useUserStore } from "../../store/UserStore";
+import TheSearchBar from '../TheSearchBar.vue';
 export default {
   setup() {
     const userStore = useUserStore();

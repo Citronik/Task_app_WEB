@@ -127,7 +127,10 @@ import { useUserStore } from "../store/UserStore";
         setTimeout(() => (this.loading = false), 2000)
         const res = await this.register();
         if (!res.error) {
-          this.$router.push("/");
+          this.$router.push("/login");
+        } else {
+          //add alert
+          console.log(res.error);
         }
       },
       required (v) {
@@ -142,7 +145,6 @@ import { useUserStore } from "../store/UserStore";
           email: this.email,
           password: this.password,
         };
-        console.log(JSON.stringify(credentials));
         var res = await this.userStore.signUp( JSON.stringify(credentials) );
         return res;
       },

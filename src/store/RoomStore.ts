@@ -1,9 +1,10 @@
 import { defineStore } from "pinia";
 import apiClient from '@/store/modules/apiClient';
+import { Room } from '@/models/Room';
 
 export const useRoomStore = defineStore("room", {
   state: () => ({
-    rooms: [],
+    rooms: [] as Room[],
   }),
   actions: {
     async fetchRooms() : Promise<any> {
@@ -18,7 +19,7 @@ export const useRoomStore = defineStore("room", {
     },
   },
   getters: {
-    getRooms() : any {
+    getRooms() : Room[] {
       return this.rooms;
     },
   },

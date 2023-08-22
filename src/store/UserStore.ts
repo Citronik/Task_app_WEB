@@ -43,7 +43,7 @@ export const useUserStore = defineStore("user", {
         const res = await apiClient.post('/users/register', user);
         this.user = res.data.user;
         localStorage.setItem('userStore', JSON.stringify(this.$state));
-        return this.user;
+        return { res:  res.data.message, err: null, status: res.data.status};
       } catch (error: any) {
         this.err = error.message;
         console.log('err: ',  this.err);
