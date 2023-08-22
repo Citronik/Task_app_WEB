@@ -24,11 +24,47 @@
 
         <v-divider></v-divider>
 
-        <v-list density="compact" nav>
-          <v-list-item prepend-icon="mdi-home-city" title="Home" value="home"></v-list-item>
-          <v-list-item prepend-icon="mdi-account" title="My Account" value="account"></v-list-item>
-          <v-list-item prepend-icon="mdi-account-group-outline" title="My rooms" value="rooms" @click="getRooms"></v-list-item>
+        <v-list v-model:opened="open" density="compact" nav>
+          <v-list-item prepend-icon="mdi-home-city" active-color="primary" title="Home" value="home"></v-list-item>
+          <v-list-item prepend-icon="mdi-account" active-color="primary" title="My Account" value="account"></v-list-item>
+          <v-list-group value="Rooms">
+            <template v-slot:activator="{ props }">
+              <v-list-item
+                active-color="primary"
+                v-bind="props"
+                prepend-icon="mdi-account-group-outline"
+                title="Rooms"
+              ></v-list-item>
+            </template>
+
+            <v-list-item
+              active-color="primary"
+              v-bind="props"
+              title="Create room"
+              @click="createRoom()"
+            ></v-list-item>
+
+            <v-list-group value="My rooms">
+              <template v-slot:activator="{ props }">
+                <v-list-item
+                  active-color="primary"
+                  v-bind="props"
+                  title="My rooms"
+                ></v-list-item>
+              </template>
+
+              <v-list-item
+                v-for="room in rooms"
+                :key="room.id"
+                :title="room.room_name"
+                :value="room.room_name"
+                @click="enterRoom(room)"
+              ></v-list-item>
+
+            </v-list-group>
+          </v-list-group>
         </v-list>
+        <v-divider></v-divider>
       </v-navigation-drawer>
       <v-main style="min-height: 100vh">
 
@@ -42,12 +78,14 @@
 <script lang="ts">
   import { useUserStore } from "../store/UserStore";
   import { useRoomStore } from "../store/RoomStore";
+  import { useAlertStore } from '@/store/AlertStore';
 export default{
   setup() {
     const userStore = useUserStore();
     userStore.initialize();
     const roomStore = useRoomStore();
-    return { userStore, roomStore };
+    const alertStore = useAlertStore();
+    return { userStore, roomStore, alertStore };
   },
   data() {
     return {
@@ -56,23 +94,27 @@ export default{
       drawer: true,
       rail: false,
       rooms: [],
+      rooms_Visible: false,
+      open: ["Rooms"],
     };
   },
-  mounted() {
+  async mounted() {
     this.userStore.fetchUser();
     this.userStore.fetchProfile();
     this.username = this.userStore.user?.username || "Anonymous";
-    this.avatar = this.userStore.profile?.avatar ? "http://127.0.0.1:3333/uploads/" + this.userStore.profile?.avatar.file.name : "/anonymous-avatar-icon-25.jpg";
+    this.avatar = this.userStore.profile?.avatar ? import.meta.env.VITE_API_URL + "uploads/" + this.userStore.profile?.avatar.file.name : "/anonymous-avatar-icon-25.jpg";
+    await this.getRooms();
   },
   watch: {
     userStore: {
       deep: true,
       handler() {
         this.username = this.userStore.user?.username || "Anonymous";
-        this.avatar = this.userStore.profile?.avatar ? "http://127.0.0.1:3333/uploads/" + this.userStore.profile?.avatar.file.name : "/anonymous-avatar-icon-25.jpg";
+        this.avatar = this.userStore.profile?.avatar ? import.meta.env.VITE_API_URL + "uploads/" +
+         this.userStore.profile?.avatar.file.name : "/anonymous-avatar-icon-25.jpg";
       },
     },
-    roomStore: {
+    "roomStore.rooms": {
       deep: true,
       handler() {
         this.rooms = this.roomStore.rooms;
@@ -85,8 +127,25 @@ export default{
       await this.userStore.signOut();
     },
     async getRooms() {
-      await this.roomStore.fetchRooms();
-      this.$router.push({ name: "rooms" });
+      const {res, err} = await this.roomStore.fetchRooms();
+      console.log(res);
+      if (err) {
+        console.log(err);
+        this.alertStore.addNotification({
+            id: Date.now(),
+            title: "Fetching rooms Error",
+            text: "Error fetching rooms",
+            type: "error",
+          });
+      }
+
+      //this.$router.push({ name: "rooms" });
+    },
+    enterRoom(room) {
+      // Handle navigation to the specific room here
+    },
+    createRoom() {
+      // Handle navigation to the create room here
     },
   },
 };
@@ -96,5 +155,11 @@ export default{
   #side {
     grid-area: side;
     padding: 1rem;
+  }
+  .rooms {
+    padding-left: 0rem;
+    padding-top: 0.1rem;
+    border: 0px solid lightgray;
+
   }
 </style>

@@ -3,9 +3,12 @@ import vue from '@vitejs/plugin-vue'
 import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 
 // Utilities
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import { fileURLToPath, URL } from 'node:url'
 const { createProxyMiddleware } = require('http-proxy-middleware');
+
+// Load environment variables from .env files
+const env = loadEnv('', process.cwd());
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -37,7 +40,7 @@ export default defineConfig({
     port: 3000,
     proxy: {
       "/api": {
-        target: "http://127.0.0.1:3333/",
+        target: env.VITE_API_URL,
         changeOrigin: false,
         secure: false,
         autoRewrite: false,

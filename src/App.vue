@@ -1,9 +1,9 @@
 <template>
   <v-app>
+    <TheAlertManager />
     <TheNavigator />
     <TheNavigatorAuth />
-
-    <v-main v-if="!userStore.isLoggedIn" style="min-height: 100vh">
+    <v-main v-if="!userStore.isLoggedIn" >
       <router-view></router-view>
     </v-main>
     <TheFooterVue />
@@ -14,6 +14,7 @@
   import TheNavigatorAuth from '@/components/TheNavigatorAuth.vue'
   import TheNavigator from '@/components/TheNavigator.vue'
   import TheFooterVue from '@/components/TheFooter.vue'
+  import TheAlertManager from '@/components/Alerts/TheAlertManager.vue'
   import { useUserStore } from '@/store/UserStore'
 
   const userStore = useUserStore();

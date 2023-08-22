@@ -1,0 +1,51 @@
+<template>
+  <div class="alert-container" v-for="alert in alerts" :key="alert.id">
+    <TheLoginAlert
+      :alertTitle="alert.title"
+      :alertText="alert.text"
+      :alertType="alert.type"
+      @close="removeNotification(alert)"
+    />
+  </div>
+</template>
+
+<script lang="ts">
+  import { useAlertStore } from '@/store/AlertStore';
+    export default {
+      setup() {
+        const alertStore = useAlertStore();
+
+        return { alertStore, alerts: alertStore.alerts};
+      },
+      watch: {
+        alertStore: {
+          deep: true,
+          handler() {
+            this.alerts = this.alertStore.alerts;
+          },
+        },
+      },
+      methods: {
+        removeNotification(alert: any){
+          this.alertStore.removeNotification(alert);
+        },
+      },
+    };
+</script>
+
+<style>
+  .alert-container {
+    position: absolute;
+    z-index: 10000;
+    top: 30%;
+    left: 50%;
+    min-width: 300px;
+    min-height: 100px;
+    max-width: 500px;
+    max-height: 200px;
+    display: flex;
+    justify-content: center;
+    transform: translate(-50%, -50%);
+    align-items: center;
+  }
+</style>

@@ -10,15 +10,17 @@ export const useRoomStore = defineStore("room", {
       console.log('getting rooms');
       try {
         const res = await apiClient.get('/rooms');
-        this.rooms = res.data.data;
-        return this.rooms;
+        this.rooms = res.data;
+        return { res: this.rooms };
       } catch (error: any) {
         return {res: null, err: error.message};
       }
     },
   },
   getters: {
-
+    getRooms() : any {
+      return this.rooms;
+    },
   },
 
 });

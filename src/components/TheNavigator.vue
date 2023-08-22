@@ -34,7 +34,7 @@
   </v-toolbar>
 </template>
 
-<script>
+<script lang="ts">
 import { useUserStore } from "../store/UserStore";
 import TheSearchBar from './TheSearchBar.vue';
 export default {

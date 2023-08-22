@@ -1,4 +1,7 @@
 <template>
+
+
+
   <v-sheet id="login" class="bg-grey-lighten-2 pa-16" rounded>
     <v-card class="mx-auto px-6 py-8" max-width="400">
 
@@ -48,11 +51,13 @@
 
 <script lang="ts">
 import { useUserStore } from "../store/UserStore";
+import { useAlertStore } from "../store/AlertStore";
   export default {
     setup() {
       const userStore = useUserStore();
       userStore.initialize();
-      return { userStore };
+      const alertStore = useAlertStore();
+      return { userStore, alertStore };
     },
     data: () => ({
       loginForm: false,
@@ -62,6 +67,7 @@ import { useUserStore } from "../store/UserStore";
       show1: false,
       show2: true,
       loading: false,
+      error: null,
       rules: {
           required: value  => !!value || 'Required.',
           min: v => v.length >= 8 || 'Min 8 characters',
@@ -80,17 +86,26 @@ import { useUserStore } from "../store/UserStore";
         this.loading = true
 
         setTimeout(() => (this.loading = false), 2000)
+        this.error = null;
         const res = await this.login();
-        //const profileRes = await this.profile();
-        if (res.error) {
-          //notyfy user about error
+        //console.log(res);
 
+        if (res.err) {
+          this.error = res.err;
+          this.alertStore.addNotification({
+            id: Date.now(),
+            title: "Login Error",
+            text: this.error,
+            type: "error",
+          });
         } else {
-          // this.$store.commit("setSnackbar", {
-          //   text: "Login successful",
-          //   color: "success",
-          // });
-          // success
+          this.error = null;
+          this.alertStore.addNotification({
+            id: Date.now(),
+            title: "Login Success",
+            text: "You are now logged in.",
+            type: "success",
+          });
           this.$router.push("/");
         }
       },
@@ -103,12 +118,10 @@ import { useUserStore } from "../store/UserStore";
           email: this.email,
           password: this.password
         };
-        var res = await this.userStore.signIn( credentials );
-        return res;
+        return await this.userStore.signIn( credentials );
       },
       async profile() {
-        var res = await this.userStore.fetchProfile();
-        return res;
+        return await this.userStore.fetchProfile();
       },
     },
   }
