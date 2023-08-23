@@ -1,5 +1,5 @@
 <template>
-
+  <span> Room View workaround</span>
 </template>
 
 <script>

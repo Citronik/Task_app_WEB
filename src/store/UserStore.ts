@@ -1,10 +1,11 @@
 // /store/user.js
 import { defineStore } from "pinia";
 import apiClient from '@/store/modules/apiClient';
+import { User } from '@/models/User';
 
 export const useUserStore = defineStore("user", {
   state: () => ({
-    user: null,
+    user: null as User,
     profile: null,
     err: null,
   }),

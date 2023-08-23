@@ -25,8 +25,8 @@
         <v-divider></v-divider>
 
         <v-list v-model:opened="open" density="compact" nav>
-          <v-list-item prepend-icon="mdi-home-city" active-color="primary" title="Home" value="home"></v-list-item>
-          <v-list-item prepend-icon="mdi-account" active-color="primary" title="My Account" value="account"></v-list-item>
+          <v-list-item prepend-icon="mdi-home-city" active-color="primary" title="Home" value="home" to="/"></v-list-item>
+          <v-list-item prepend-icon="mdi-account" active-color="primary" title="My Account" value="account" to="/my-account"></v-list-item>
           <v-list-group value="Rooms">
             <template v-slot:activator="{ props }">
               <v-list-item
@@ -39,7 +39,6 @@
 
             <v-list-item
               active-color="primary"
-              v-bind="props"
               title="Create room"
               @click="createRoom()"
             ></v-list-item>
@@ -58,7 +57,7 @@
                 :key="room.id"
                 :title="room.room_name"
                 :value="room.room_name"
-                @click="enterRoom(room)"
+                to="/room/:id"
               ></v-list-item>
 
             </v-list-group>
@@ -76,8 +75,8 @@
 </template>
 
 <script lang="ts">
-  import { useUserStore } from "../../store/UserStore";
-  import { useRoomStore } from "../../store/RoomStore";
+  import { useUserStore } from "@/store/UserStore";
+  import { useRoomStore } from "@/store/RoomStore";
   import { useAlertStore } from '@/store/AlertStore';
   import { Room } from '@/models/Room';
 export default{
@@ -102,7 +101,8 @@ export default{
     this.userStore.fetchUser();
     this.userStore.fetchProfile();
     this.username = this.userStore.user?.username || "Anonymous";
-    this.avatar = this.userStore.profile?.avatar ? import.meta.env.VITE_API_URL + "uploads/" + this.userStore.profile?.avatar.file.name : "/anonymous-avatar-icon-25.jpg";
+    this.avatar = this.userStore.profile?.avatar ? import.meta.env.VITE_API_URL + "uploads/" +
+      this.userStore.profile?.avatar.file.name : "/anonymous-avatar-icon-25.jpg";
     await this.getRooms();
   },
   watch: {

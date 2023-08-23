@@ -15,7 +15,12 @@
       setup() {
         const alertStore = useAlertStore();
 
-        return { alertStore, alerts: alertStore.alerts};
+        return { alertStore };
+      },
+      data() {
+      return {
+        alerts: [],
+        };
       },
       watch: {
         alertStore: {
@@ -35,17 +40,24 @@
 
 <style>
   .alert-container {
-    position: absolute;
-    z-index: 10000;
-    top: 30%;
-    left: 50%;
-    min-width: 300px;
-    min-height: 100px;
-    max-width: 500px;
-    max-height: 200px;
-    display: flex;
-    justify-content: center;
-    transform: translate(-50%, -50%);
-    align-items: center;
+    position: fixed;
+    top: 20px;
+    right: 20px;
   }
 </style>
+/*
+.alert-container {
+  position: fixed;
+  z-index: 10000;
+  top: 30%;
+  left: 50%;
+  min-width: 300px;
+  min-height: 100px;
+  max-width: 500px;
+  max-height: 200px;
+  display: flex;
+  justify-content: center;
+  transform: translate(-50%, -50%);
+  align-items: center;
+}
+*/

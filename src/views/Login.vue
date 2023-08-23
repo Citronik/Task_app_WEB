@@ -1,7 +1,4 @@
 <template>
-
-
-
   <v-sheet id="login" class="bg-grey-lighten-2 pa-16" rounded>
     <v-card class="mx-auto px-6 py-8" max-width="400">
 
@@ -74,6 +71,7 @@ import { useAlertStore } from "../store/AlertStore";
           emailMatch: () => (`The email and password you entered don't match`),
           email: value => {
             const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            const username = value.substring(0, value.lastIndexOf("@"));
             return pattern.test(value) || 'Invalid e-mail.'
           },
         },
