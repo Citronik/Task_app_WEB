@@ -104,7 +104,10 @@ import { useAlertStore } from "../store/AlertStore";
             text: "You are now logged in.",
             type: "success",
           });
-          this.$router.push("/");
+          //this.userStore.initialize();
+          //this.$router.push({ name: 'Home' });
+          const routeUrl = this.$router.resolve({ name: 'Home' }).href;
+          window.location.href = routeUrl;
         }
       },
       required (v: any) {

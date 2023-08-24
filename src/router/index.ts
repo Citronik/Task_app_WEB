@@ -1,5 +1,7 @@
 // Composables
+import { useUserStore } from '@/store/UserStore'
 import { createRouter, createWebHistory } from 'vue-router'
+import { RouteLocationNormalized, NavigationGuardNext } from "vue-router";
 
 const routes = [
   {
@@ -41,6 +43,29 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
+})
+
+router.beforeEach( async (to: RouteLocationNormalized,
+                    from: RouteLocationNormalized,
+                    next: NavigationGuardNext
+                    ) => {
+  const userStore = useUserStore();
+  userStore.initialize();
+  if (to.name === 'MyAccount') {
+    try {
+      const isValid = await userStore.isValidSession();
+      if (!isValid) {
+        next({ name: 'Login' });
+      } else {
+        //Maybe create alert!!
+        next();
+      }
+    } catch (error) {
+      next(false);
+    }
+  } else {
+    next();
+  }
 })
 
 export default router

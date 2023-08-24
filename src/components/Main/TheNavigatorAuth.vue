@@ -1,5 +1,5 @@
 <template>
-  <v-card class="side" v-if="userStore.isLoggedIn">
+  <v-card class="side" v-if="authenticated">
     <v-layout>
       <v-navigation-drawer
         v-model="drawer"
@@ -95,6 +95,7 @@ export default{
       rail: false,
       rooms: [] as Room[],
       open: ["Rooms"],
+      authenticated: false,
     };
   },
   async mounted() {
@@ -104,6 +105,7 @@ export default{
     this.avatar = this.userStore.profile?.avatar ? import.meta.env.VITE_API_URL + "uploads/" +
       this.userStore.profile?.avatar.file.name : "/anonymous-avatar-icon-25.jpg";
     await this.getRooms();
+    this.authenticated = await this.userStore.isValidSession();
   },
   watch: {
     userStore: {

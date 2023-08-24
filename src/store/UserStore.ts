@@ -56,7 +56,8 @@ export const useUserStore = defineStore("user", {
       this.err = null;
       try {
         const res = await apiClient.post('/users/login', credentials);
-        this.user = res.data.data.user;
+        this.user = res.data.data;
+        console.log('user: ', this.user);
         console.log('res: ', res);
         if (this.user) {  // if user is logged in
           localStorage.setItem('userStore', JSON.stringify(this.$state));
@@ -90,10 +91,12 @@ export const useUserStore = defineStore("user", {
       try {
         const res = await apiClient.get('/users/me');
         this.user = res.data.data;
+        console.log('suc: ', res);
         return true;
       } catch (error: any) {
-        if (error.response && error.response.status === 401) {
+        if (error.response?.status === 401) {
           this.signOut();
+          console.log('unauth: ', error.response);
           return false;
         } else {
           this.err = error.message;
