@@ -2,7 +2,7 @@
   <span> Room View workaround</span>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   setup() {
     return {};

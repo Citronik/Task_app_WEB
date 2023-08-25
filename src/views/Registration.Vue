@@ -84,7 +84,7 @@
   </v-sheet>
 </template>
 
-<script>
+<script lang="ts">
 import { useUserStore } from "../store/UserStore";
   export default {
     setup() {
