@@ -14,7 +14,12 @@ const env = loadEnv('', process.cwd());
 export default defineConfig({
   plugins: [
     vue({
-      template: { transformAssetUrls }
+      template: {
+        transformAssetUrls,
+        compilerOptions: {
+          isCustomElement: (tag) => ['TheRoomCardPop', 'TheLoginAlert', 'TheSearchBar'].includes(tag),
+        }
+      }
     }),
     // https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vite-plugin
     vuetify({

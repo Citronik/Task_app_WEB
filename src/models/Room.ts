@@ -8,6 +8,7 @@ export class Room
   photo_id: string = "";
   created_at: string = "";
   updated_at: string = "";
+  room_photo: string = "";
 
   constructor(data: Partial<Room> = {}) {
     Object.assign(this, data);

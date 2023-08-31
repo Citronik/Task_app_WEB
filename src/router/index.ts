@@ -38,6 +38,22 @@ const routes = [
     name: 'MyAccount',
     component: () => import(/* webpackChunkName: "home" */ '@/views/My-Account.vue'),
   },
+  {
+    path: '/rooms',
+    component: () => import('@/layouts/default/Default.vue'),
+    children: [
+      {
+        path: '',
+        name: 'Rooms',
+        component: () => import('@/views/Rooms.vue'),
+      },
+      {
+        path: ':id',
+        name: 'Room',
+        component: () => import('@/views/Room.vue'),
+      },
+    ],
+  },
 ]
 
 const router = createRouter({
@@ -51,7 +67,10 @@ router.beforeEach( async (to: RouteLocationNormalized,
                     ) => {
   const userStore = useUserStore();
   userStore.initialize();
-  if (to.name === 'MyAccount') {
+  const publicPages = ['Login', 'Register', 'Home', 'About'];
+  const authRequired = !publicPages.includes(to.name as string);
+
+  if ( authRequired ) {
     try {
       const isValid = await userStore.isValidSession();
       if (!isValid) {

@@ -51,7 +51,7 @@ export const useUserStore = defineStore("user", {
         return {res: null, err: error.message};
       }
     },
-    async signIn(credentials:JSON) : Promise<any> {
+    async signIn(credentials: { username: string; email: string; password: string }) : Promise<any> {
       console.log('logging');
       this.err = null;
       try {

@@ -9,7 +9,7 @@
         <v-text-field
           v-model="email"
           :readonly="loading"
-          :rules="[rules.required, rules.email]"
+          :rules="[rules.required, rules.login]"
           class="mb-2"
           clearable
           label="Email"
@@ -49,6 +49,7 @@
 <script lang="ts">
 import { useUserStore } from "../store/UserStore";
 import { useAlertStore } from "../store/AlertStore";
+import { formToJSON } from 'axios';
   export default {
     setup() {
       const userStore = useUserStore();
@@ -58,21 +59,29 @@ import { useAlertStore } from "../store/AlertStore";
     },
     data: () => ({
       loginForm: false,
-      username: null,
-      email: null,
-      password: null,
+      username: " ",
+      email: "",
+      password: "",
       show1: false,
       show2: true,
       loading: false,
-      error: null,
+      error: null as any,
       rules: {
-          required: value  => !!value || 'Required.',
-          min: v => v.length >= 8 || 'Min 8 characters',
+          required: ( value: any)  => !!value || 'Required.',
+          min: ( v: string ) => v.length >= 8 || 'Min 8 characters',
           emailMatch: () => (`The email and password you entered don't match`),
-          email: value => {
+          email: ( value: string ) => {
             const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-            const username = value.substring(0, value.lastIndexOf("@"));
             return pattern.test(value) || 'Invalid e-mail.'
+          },
+          username: (value: string) => {
+            const pattern = /^[a-zA-Z0-9]+$/
+            return pattern.test(value) || 'Invalid username. Use only letters and numbers.'
+          },
+          login: (value: string) => {
+            const usernamePattern = /^[a-zA-Z0-9]+$/
+            const emailPattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            return (emailPattern.test(value) || usernamePattern.test(value)) || 'Invalid login.'
           },
         },
     }),

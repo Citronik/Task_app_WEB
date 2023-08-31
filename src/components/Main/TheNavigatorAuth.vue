@@ -57,7 +57,7 @@
                 :key="room.id"
                 :title="room.room_name"
                 :value="room.room_name"
-                to="/room/:id"
+                :to="`/rooms/${room.id}`"
               ></v-list-item>
 
             </v-list-group>

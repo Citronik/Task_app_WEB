@@ -17,7 +17,10 @@
     props: {
       alertTitle: String,
       alertText: String,
-      alertType: String,
+      alertType: {
+      type: String as () => "error" | "success" | "warning" | "info",
+      required: true,
+    },
     },
     data() {
       return {

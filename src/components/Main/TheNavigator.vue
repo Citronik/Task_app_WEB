@@ -8,7 +8,7 @@
     <v-spacer></v-spacer>
     <v-toolbar-items class="hidden-sm-and-down">
       <TheSearchBar />
-      <v-btn :key="register" :to="register" v-if="!userStore.isLoggedIn">
+      <v-btn key="register" to="register" v-if="!userStore.isLoggedIn">
         <router-link class="custom-link-style" to="/register">
           <v-icon class="mr-2">account_box</v-icon>
           Register
