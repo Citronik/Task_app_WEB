@@ -1,8 +1,7 @@
 <template>
   <v-container
-    class="mx-auto"
+    class="mx-auto side"
     fluid
-    style="height: 300px"
   >
     <v-row justify="center">
       <v-menu
@@ -18,7 +17,7 @@
               color="brown"
               size="large"
             >
-              <span class="text-h5">{{ props.room.id }}</span>
+              <span class="text-h5">{{ props.room_id }}</span>
             </v-avatar>
           </v-btn>
         </template>
@@ -28,9 +27,9 @@
               <v-avatar
                 color="brown"
               >
-                <span class="text-h5">{{ props.room.id }}</span>
+                <span class="text-h5">{{ $props.room_id}}</span>
               </v-avatar>
-              <h3>{{ props.room.room_name }}</h3>
+              <h3>{{ $props.room_name }}</h3>
               <p class="text-caption mt-1">
                 {{ ownerName }}
               </p>
@@ -57,30 +56,33 @@
 </template>
 
 <script lang="ts">
-  import { Room } from "@/models/Room";
   import { useUserStore } from "@/store/UserStore";
 
   export default {
     setup() {
       const userStore = useUserStore();
+      console.log("TheRoomCardPop:");
       return { userStore };
     },
     data: () => ({
       ownerName: "",
+      //room: {} as Room,
     }),
     props: {
-      room: {
-        type: Room,
-        required: true,
-      },
+      room_id: Number,
+      room_name: String,
+      owner_id: Number,
     },
     async mounted() {
-      this.ownerName = await this.userStore.fetchUser(this.room.owner_id);
-      console.log("TheRoomCardPop:", this.room);
+      this.ownerName = await this.userStore.fetchUserByID(this.$props.owner_id);
+      console.log("TheRoomCardPop:");
     },
   }
 </script>
 
 <style>
-
+  #side {
+    grid-area: side;
+    padding: 1rem;
+  }
 </style>

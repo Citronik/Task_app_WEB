@@ -51,6 +51,7 @@ const routes = [
         path: ':id',
         name: 'Room',
         component: () => import('@/views/Room.vue'),
+        
       },
     ],
   },

@@ -115,6 +115,18 @@ export const useUserStore = defineStore("user", {
         localStorage.removeItem('userStore');
       }
     },
+    async fetchUserByID(user_id: Number) : Promise<any> {
+      console.log('getting user');
+
+      try {
+        const res = await apiClient.get('/users/' + user_id);
+        this.user = res.data.data;
+        return this.user;
+      } catch (error: any) {
+        this.err = error.message;
+        return {res: null, err: error.message};
+      }
+    },
   },
   getters: {
     isLoggedIn(): boolean {

@@ -5,7 +5,7 @@ export class Room
   room_name: string = "";
   room_table: string = "";
   description: string = "";
-  photo_id: string = "";
+  photo_id: Number = 0;
   created_at: string = "";
   updated_at: string = "";
   room_photo: string = "";
