@@ -40,18 +40,18 @@ const routes = [
   },
   {
     path: '/rooms',
-    component: () => import('@/layouts/default/Default.vue'),
+    component: () => import('@/views/room/Rooms.vue'),
     children: [
       {
         path: '',
         name: 'Rooms',
-        component: () => import('@/views/Rooms.vue'),
+        component: () => import('@/views/room/Rooms.vue'),
       },
       {
         path: ':id',
         name: 'Room',
-        component: () => import('@/views/Room.vue'),
-        
+        component: () => import('@/views/room/Room.vue'),
+
       },
     ],
   },
