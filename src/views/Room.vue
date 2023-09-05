@@ -100,7 +100,7 @@ export default {
   },
   async mounted() {
     await this.userStore.fetchUser();
-    this.room = await this.roomStore.fetchRoom(this.$route.params.id);
+    this.room = await this.roomStore.fetchRoom(+this.$route.params.id);
     const owner = await this.userStore.fetchUserByID(this.room.creator_id);
     this.ownerName = owner.username;
     uploadService.getPhotoUrl(this.room.photo_id).then((url) => {
