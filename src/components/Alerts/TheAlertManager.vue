@@ -11,31 +11,35 @@
 
 <script lang="ts">
   import { useAlertStore } from '@/store/AlertStore';
-    export default {
-      setup() {
-        const alertStore = useAlertStore();
+  import TheLoginAlert from './TheLoginAlert.vue';
+  export default {
+    components: {
+      TheLoginAlert,
+    },
+    setup() {
+      const alertStore = useAlertStore();
 
-        return { alertStore };
-      },
-      data() {
-      return {
-        alerts: [],
-        };
-      },
-      watch: {
-        alertStore: {
-          deep: true,
-          handler() {
-            this.alerts = this.alertStore.alerts;
-          },
+      return { alertStore };
+    },
+    data() {
+    return {
+      alerts: [],
+      };
+    },
+    watch: {
+      alertStore: {
+        deep: true,
+        handler() {
+          this.alerts = this.alertStore.alerts;
         },
       },
-      methods: {
-        removeNotification(alert: any){
-          this.alertStore.removeNotification(alert);
-        },
+    },
+    methods: {
+      removeNotification(alert: any){
+        this.alertStore.removeNotification(alert);
       },
-    };
+    },
+  };
 </script>
 
 <style>

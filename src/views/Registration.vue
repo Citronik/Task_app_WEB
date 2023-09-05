@@ -1,11 +1,10 @@
 <template>
   <v-sheet id="register" class="bg-grey-lighten-2 pa-16" rounded>
-    <v-card 
-    class="mx-auto px-6 py-8" 
+    <v-card
+    class="mx-auto px-6 py-8"
     max-width="400"
     title="Registration"
     >
-
       <v-form
         v-model="regForm"
         @submit.prevent="onSubmit"
@@ -43,7 +42,7 @@
           clearable
           label="Last name"
         ></v-text-field>
-        
+
         <v-text-field
           v-model="password"
           :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
@@ -57,9 +56,9 @@
           placeholder="Enter your password"
           @click:append="show1 = !show1"
         ></v-text-field>
-        
+
         <br>
-        
+
         <v-checkbox
           v-model="terms"
           color="secondary"
@@ -90,28 +89,29 @@ import { useUserStore } from "../store/UserStore";
     setup() {
     const userStore = useUserStore();
     userStore.initialize();
+
     return { userStore };
   },
     data: () => ({
       regForm: false,
-      username: null,
-      first: null,
-      last: null,
-      email: null,
-      password: null,
+      username: "",
+      first: "",
+      last: "",
+      email: "",
+      password: "",
       show1: false,
       show2: true,
       terms: false,
       loading: false,
       rules: {
-          required: value => !!value || 'Required.',
-          min: v => v.length >= 8 || 'Min 8 characters',
+          required: (value: string) => !!value || 'Required.',
+          min: (v: string) => v.length >= 8 || 'Min 8 characters',
           emailMatch: () => (`The email and password you entered don't match`),
-          email: value => {
+          email: (value: string) => {
             const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
             return pattern.test(value) || 'Invalid e-mail.'
           },
-          username: value => {
+          username: (value: string) => {
             const pattern = /^[a-zA-Z0-9]+$/;
             return pattern.test(value) || 'Invalid username. Use only letters and numbers.'
           },
@@ -133,7 +133,7 @@ import { useUserStore } from "../store/UserStore";
           console.log(res.error);
         }
       },
-      required (v) {
+      required (v: string) {
         return !!v || 'Field is required'
       },
       async register() {
@@ -145,7 +145,8 @@ import { useUserStore } from "../store/UserStore";
           email: this.email,
           password: this.password,
         };
-        var res = await this.userStore.signUp( JSON.stringify(credentials) );
+        const json: string = JSON.stringify(credentials);
+        var res = await this.userStore.signUp(json);
         return res;
       },
       async getProfile() {

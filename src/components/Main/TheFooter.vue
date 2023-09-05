@@ -21,18 +21,16 @@
 
 <script lang="ts">
 export default {
-    data: () => ({
-      links: [
-        {name:'Home', path:'/'},
-        {name:'About Us', path:'/about'},
-        {name:'Facebook', path:'/facebook'},
-        {name:'Blog', path:'/blog'},
-        {name:'Contact Us', path:'/contact'},
-      ],
-    }),
-    methods: {
-
-  },
+  data: () => ({
+    links: [
+      {name:'Home', path:'/'},
+      {name:'About Us', path:'/about'},
+      {name:'Facebook', path:'/facebook'},
+      {name:'Blog', path:'/blog'},
+      {name:'Contact Us', path:'/contact'},
+    ],
+  }),
+  methods: {},
   }
 </script>
 

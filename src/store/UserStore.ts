@@ -38,7 +38,7 @@ export const useUserStore = defineStore("user", {
         return {res: null, err: error.message};
       }
     },
-    async signUp(user:JSON) : Promise<any>{
+    async signUp(user: string) : Promise<any>{
       try {
         this.err = null;
         const res = await apiClient.post('/users/register', user);
