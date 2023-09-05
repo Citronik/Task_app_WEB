@@ -38,9 +38,12 @@
 import { useUserStore } from "../../store/UserStore";
 import TheSearchBar from '../TheSearchBar.vue';
 export default {
+  components: {
+    TheSearchBar,
+  },
   setup() {
     const userStore = useUserStore();
-    return { userStore, TheSearchBar };
+    return { userStore };
   },
   data() {
     return {

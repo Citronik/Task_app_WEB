@@ -4,62 +4,23 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { RouteLocationNormalized, NavigationGuardNext } from "vue-router";
 
 const routes = [
-  {
-    path: '/',
-    component: () => import('@/layouts/default/Default.vue'),
-    children: [
-      {
-        path: '',
-        name: 'Home',
-        // route level code-splitting
-        // this generates a separate chunk (about.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
-        component: () => import(/* webpackChunkName: "home" */ '@/views/Home.vue'),
-      },
-    ],
-  },
-  {
-    path: '/login',
-    name: 'Login',
-    component: () => import(/* webpackChunkName: "home" */ '@/views/Login.vue'),
-  },
-  {
-    path: '/register',
-    name: 'Register',
-    component: () => import(/* webpackChunkName: "home" */ '@/views/Registration.vue'),
-  },
-  {
-    path: '/about',
-    name: 'About',
-    component: () => import(/* webpackChunkName: "home" */ '@/views/About.vue'),
-  },
-  {
-    path: '/my-account',
-    name: 'MyAccount',
-    component: () => import(/* webpackChunkName: "home" */ '@/views/My-Account.vue'),
-  },
-  {
-    path: '/rooms',
-    component: () => import('@/views/room/Rooms.vue'),
-    children: [
-      {
-        path: '',
-        name: 'Rooms',
-        component: () => import('@/views/room/Rooms.vue'),
-      },
-      {
-        path: ':id',
-        name: 'Room',
-        component: () => import('@/views/room/Room.vue'),
+  // { path: '/rooms', name: 'Rooms', component: () => import('@/views/room/Rooms.vue'),
+  //   children: [
+  //     { path: ':id/:slug', name: 'Room', component: () => import('@/views/room/Room.vue') },
+  //   ],
+  // },
+  { path: ':id/:slug', name: 'Room', component: () => import('@/views/room/Room.vue') },
+  { path: '', name: 'Home', component: () => import('@/views/Home.vue') },
+  { path: '/login', name: 'Login', component: () => import('@/views/Login.vue') },
+  { path: '/register', name: 'Register', component: () => import('@/views/Registration.vue') },
+  { path: '/about', name: 'About', component: () => import('@/views/About.vue') },
+  { path: '/my-account', name: 'MyAccount', component: () => import('@/views/My-Account.vue') },
+];
 
-      },
-    ],
-  },
-]
-
+/* ts-ignore */
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
   routes,
+  history: createWebHistory(process.env.BASE_URL),
 })
 
 router.beforeEach( async (to: RouteLocationNormalized,
