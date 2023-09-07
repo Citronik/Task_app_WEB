@@ -25,8 +25,8 @@ export default {
     links: [
       {name:'Home', path:'/'},
       {name:'About Us', path:'/about'},
-      {name:'Facebook', path:'/facebook'},
-      {name:'Twiter', path:'/twitter'},
+      {name:'Facebook', path:'www.facebook.com/filipperdoch'},
+      {name:'Twiter', path:'www.twitter.com/filipperdoch'},
       {name:'Contact Us', path:'/contact'},
     ],
   }),
