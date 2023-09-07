@@ -103,9 +103,7 @@ export default {
     this.room = await this.roomStore.fetchRoom(+this.$route.params.id);
     const owner = await this.userStore.fetchUserByID(this.room.creator_id);
     this.ownerName = owner.username;
-    uploadService.getPhotoUrl(this.room.photo_id).then((url) => {
-      this.room.room_photo = url;
-    })
+    this.room.room_photo = (await uploadService.getPhotoUrl(this.room.photo_id)).toString();
   },
   methods: {
 

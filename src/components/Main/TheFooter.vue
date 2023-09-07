@@ -26,7 +26,7 @@ export default {
       {name:'Home', path:'/'},
       {name:'About Us', path:'/about'},
       {name:'Facebook', path:'/facebook'},
-      {name:'Blog', path:'/blog'},
+      {name:'Twiter', path:'/twitter'},
       {name:'Contact Us', path:'/contact'},
     ],
   }),

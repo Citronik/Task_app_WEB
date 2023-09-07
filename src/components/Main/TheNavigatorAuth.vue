@@ -146,6 +146,7 @@ export default{
     enterRoom(room : Room) {
       // Handle navigation to the specific room here
       this.$router.push({ name: "room", params: { id: room.id, slug:room.room_name } });
+
     },
     createRoom() {
       // Handle navigation to the create room here

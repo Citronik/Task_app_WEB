@@ -13,7 +13,7 @@ import { createApp } from 'vue'
 // Plugins
 import { registerPlugins } from '@/plugins'
 import { createPinia } from 'pinia'
-import router from "@/router/index"
+
 
 // Add router to app
 
@@ -24,6 +24,5 @@ const app = createApp(App)
 registerPlugins(app)
 
 app.use(pinia)
-app.use(router)
 
 app.mount('#app')
