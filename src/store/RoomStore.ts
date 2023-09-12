@@ -26,6 +26,9 @@ export const useRoomStore = defineStore("room", {
         return null;
       }
     },
+    getRoom(id: number) : Room {
+      return this.rooms.find(room => room.id === id);
+    },
   },
   getters: {
     getRooms() : Room[] {

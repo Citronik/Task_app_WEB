@@ -73,7 +73,9 @@
         v-for="n in 3"
         :key="n"
         :value="n"
-      ></v-window-item>
+      >
+        <TheMessageCard v-if="n==3"/>
+      </v-window-item>
     </v-window>
   </v-card>
 </template>
@@ -83,9 +85,12 @@ import { useUserStore } from "@/store/UserStore";
 import { useRoomStore } from "@/store/RoomStore";
 import { Room } from "@/models/Room";
 import uploadService from "@/services/UploadService";
+import TheMessageCard from "@/components/models/room_messages/TheMessageCard.vue";
 
 export default {
-
+  components: {
+    TheMessageCard,
+  },
   setup() {
     const userStore = useUserStore();
     const roomStore = useRoomStore();
@@ -94,7 +99,7 @@ export default {
   data() {
     return {
       room: {} as Room,
-      tab: null,
+      tab: [ ],
       ownerName: "",
     };
   },
@@ -104,6 +109,18 @@ export default {
     const owner = await this.userStore.fetchUserByID(this.room.creator_id);
     this.ownerName = owner.username;
     this.room.room_photo = (await uploadService.getPhotoUrl(this.room.photo_id)).toString();
+  },
+  watch: {
+    '$route.params.id': {
+      handler: async function (id: number) {
+        this.room = await this.roomStore.fetchRoom(id);
+        const owner = await this.userStore.fetchUserByID(this.room.creator_id);
+        this.ownerName = owner.username;
+        this.room.room_photo = (await uploadService.getPhotoUrl(this.room.photo_id)).toString();
+      },
+      deep: true,
+      immediate: true,
+    },
   },
   methods: {
 
