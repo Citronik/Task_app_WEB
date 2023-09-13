@@ -14,12 +14,12 @@ const routes = [
   { path: '/register', name: 'Register', component: () => import('@/views/main/Registration.vue') },
   { path: '/about', name: 'About', component: () => import('@/views/main/About.vue') },
   { path: '/contact', name: 'Contact', component: () => import('@/views/main/Contact.vue') },
-  { path: '/my-account', name: 'MyAccount', component: () => import('@/views/account/My-Account.vue') },
-  { path: '/my-account/edit', name: 'EditAccount', component: () => import('@/views/account/Edit-Account.vue') },
-  { path: '/my-account/change-password', name: 'ChangePassword', component: () => import('@/views/account/Change-Password.vue') },
-  { path: '/rooms/create', name: 'CreateRoom', component: () => import('@/views/room/Create-Room.vue') },
+  { path: '/my-account', name: 'MyAccount', component: () => import('@/views/account/MyAccount.vue') },
+  { path: '/my-account/edit', name: 'EditAccount', component: () => import('@/views/account/EditAccount.vue') },
+  { path: '/my-account/change-password', name: 'ChangePassword', component: () => import('@/views/account/ChangePassword.vue') },
+  { path: '/rooms/create', name: 'CreateRoom', component: () => import('@/views/room/CreateRoom.vue') },
   { path: '/rooms/:id', name: 'Room', component: () => import('@/views/room/Room.vue') },
-  { path: '/rooms/:id/edit', name: 'EditRoom', component: () => import('@/views/room/Edit-Room.vue') },
+  { path: '/rooms/:id/edit', name: 'EditRoom', component: () => import('@/views/room/EditRoom.vue') },
 ];
 
 /* ts-ignore */
