@@ -15,10 +15,9 @@ import SvgIcon from '@jamescoyle/vue-icon'
 import { mdiSend, mdiSendCheck  } from '@mdi/js'
   export default {
     name: "room-message-button",
-
-	components: {
-		SvgIcon,
-	},
+    components: {
+      SvgIcon,
+    },
     data () {
       return {
         loading: false,
