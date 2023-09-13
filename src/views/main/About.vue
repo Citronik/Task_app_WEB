@@ -5,7 +5,9 @@
 </template>
 
 <script lang="ts">
-
+  export default {
+    name: "about-page",
+  }
 </script>
 
 <style>
