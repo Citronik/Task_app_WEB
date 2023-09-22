@@ -68,13 +68,13 @@
       <v-tab :value="2">Tasks</v-tab>
       <v-tab :value="3">Chat</v-tab>
     </v-tabs>
-    <v-window v-model="tab">
+    <v-window v-model="tab" style="height: 100%;">
       <v-window-item
         v-for="n in 3"
         :key="n"
         :value="n"
       >
-        <TheMessageCard v-if="n==3"/>
+        <TheMessageCard v-if="n===3" />
       </v-window-item>
     </v-window>
   </v-card>

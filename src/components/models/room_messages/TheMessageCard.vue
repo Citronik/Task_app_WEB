@@ -3,22 +3,32 @@
     <div class="chat-component__header">
       <h2 class="chat-component__header__title">{{ room.room_name }}'s chat</h2>
     </div>
-    <div class="chat-component__messages">
-      <div class="chat-component__messages__message" v-for="message in messages" :key="message.id">
-        <div class="chat-component__messages__message__content">
-          <div class="chat-component__messages__message__content__text">
-            {{ message.message }}
-          </div>
-          <div class="chat-component__messages__message__content__date">
-            {{ message.created_at }}
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="chat-component__input">
-      <TheRoomMessageInputVue class="chat-component__input__field" v-model="newMessage.message"/>
-      <TheRoomMessageButton class="chat-component__input__button" @click="sendMessage" />
-    </div>
+    <v-container class="chat-component__messages">
+      <v-row v-for="message in messages" :key="message.id" :justify="message.user_id === userStore.user.id ? 'end' : 'start'">
+        <v-col cols="6" align-self="end">
+          <TheMessage
+            :userId="message.user_id"
+            :message="message.message"
+            :sentDate="message.created_at"
+          />
+        </v-col>
+      </v-row>
+    </v-container>
+    <v-container class="chat-component__input">
+      <v-row justify="center" align="center">
+        <v-col cols="10">
+          <v-divider></v-divider>
+        </v-col>
+      </v-row>
+      <v-row justify="center" align="center">
+        <v-col cols="8">
+          <TheRoomMessageInput class="chat-component__input__field" v-model="testMessage"/>
+        </v-col>
+        <v-col cols="1">
+          <TheRoomMessageButton class="chat-component__input__button" @click="sendMessage" />
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
 
@@ -27,30 +37,38 @@ import { Message } from "@/models/Message";
 import { Room } from "@/models/Room";
 import { useMessageStore } from "@/store/MessageStore";
 import { useRoomStore } from "@/store/RoomStore";
+import UserService from "@/services/UserService";
+import { useUserStore } from "@/store/UserStore";
 import TheRoomMessageButton from "./TheRoomMessageButton.vue";
-import TheRoomMessageInputVue from './TheRoomMessageInput.vue';
+import TheRoomMessageInput from './TheRoomMessageInput.vue';
+import TheMessage from './TheMessage.vue';
 export default {
   name: "room-chat-card",
   components: {
     TheRoomMessageButton,
-    TheRoomMessageInputVue,
+    TheRoomMessageInput,
+    TheMessage,
   },
   setup() {
     const messageStore = useMessageStore();
     const roomStore = useRoomStore();
-    return { messageStore, roomStore };
+    const userStore = useUserStore();
+    return { messageStore, roomStore, userStore, UserService };
   },
   data() {
     return {
-      room: null as Room,
-      messages: null as Message[],
+      room: {} as Room,
+      messages: [] as Message[],
       newMessage: {} as Message,
+      testMessage: '',
     };
   },
   async mounted() {
       // Fetch messages on mount
       this.room = this.roomStore.getRoom(+this.$route.params.id);
       this.messages = await this.messageStore.fetchMessages(+this.$route.params.id);
+      const messageContainer = document.querySelector('.chat-component__messages');
+      messageContainer.scrollTop = messageContainer.scrollHeight;
   },
   watch: {
     '$route.params.id': {
@@ -63,12 +81,20 @@ export default {
   },
   methods: {
     async sendMessage() {
+      console.log('sending message')
+      console.log(this.testMessage)
       this.newMessage.room_id = +this.$route.params.id;
+      this.newMessage.message = this.testMessage;
       const res = await this.messageStore.createMessage(this.newMessage);
       if (res) {
         this.messages.push(this.newMessage);
         this.newMessage = {} as Message;
       }
+    },
+    async getUserProfileImageUrl(id: number): Promise<string> {
+      const url = (await this.UserService.getUserPhoto(id)).toString();
+      console.log(url);
+      return url;
     },
   },
 };
@@ -99,10 +125,9 @@ export default {
   color: #333;
 }
 .chat-component__messages {
-  flex: 1;
-  display: flex;
+  max-height: 43rem;
   flex-direction: column;
-  overflow-y: auto;
+  overflow-y: scroll;
   padding: 20px;
 }
 .chat-component__messages__message {
@@ -110,6 +135,7 @@ export default {
   flex-direction: column;
   margin-bottom: 20px;
 }
+
 .chat-component__messages__message__content {
   display: flex;
   flex-direction: column;
@@ -125,24 +151,19 @@ export default {
   color: #999;
 }
 .chat-component__input {
-  display: flex;
-  align-items: center;
-  height: 60px;
-  padding: 0 20px;
-  border-top: 1px solid #e0e0e0;
+  padding: 0 0 0 0 !important;
 }
 .chat-component__input__field {
-  flex: 1;
-  height: 50px;
-  padding: 0 10px;
+  display: flex;
   font-size: 16px;
   font-weight: 400;
   color: #333;
 }
 .chat-component__input__button {
-  height: 40px;
-  padding: 0 20px;
-  margin-left: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   border: 1px solid #e0e0e0;
   border-radius: 5px;
   font-size: 16px;

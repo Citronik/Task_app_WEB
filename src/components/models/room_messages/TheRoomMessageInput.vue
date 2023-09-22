@@ -10,6 +10,7 @@
             type="text"
             variant="outlined"
             @input="emitMessage"
+            @enter="clickMe"
           >
             <template v-slot:prepend>
               <v-tooltip location="bottom">
@@ -31,33 +32,6 @@
                 ></v-progress-circular>
               </v-fade-transition>
             </template>
-
-            <template v-slot:append>
-              <v-menu>
-                <template v-slot:activator="{ props }">
-                  <v-btn v-bind="props" class="mt-n2">
-                    <v-icon icon="mdi-menu" start></v-icon>
-
-                    Menu
-                  </v-btn>
-                </template>
-
-                <v-card>
-                  <v-card-text class="pa-6">
-                    <v-btn
-                      color="primary"
-                      size="large"
-                      variant="text"
-                      @click="clickMe"
-                    >
-                      <v-icon icon="mdi-target" start></v-icon>
-
-                      Click me
-                    </v-btn>
-                  </v-card-text>
-                </v-card>
-              </v-menu>
-            </template>
           </v-text-field>
         </v-col>
       </v-row>
@@ -67,14 +41,17 @@
 
 <script lang="ts">
   export default {
+    props: {
+      modelValue: String,
+    },
     data: () => ({
-      message: 'Hey!',
+      message: '',
       loading: false,
     }),
-
     methods: {
       emitMessage() {
-        this.$emit('update:message', this.message); // Emit a custom event with the current message value.
+        //this.$emit('update:message', this.message);
+        this.$emit('update:modelValue', this.message);
       },
       clickMe () {
         this.loading = true

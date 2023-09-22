@@ -3,7 +3,7 @@
     <TheAlertManager />
     <TheNavigator />
     <TheNavigatorAuth />
-    <v-main v-if="!userStore.isLoggedIn" >
+    <v-main v-if="!userStore.isLoggedIn" style="min-height: 100vh" id="main">
       <router-view></router-view>
     </v-main>
     <TheFooterVue />

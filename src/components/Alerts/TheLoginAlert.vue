@@ -1,8 +1,6 @@
 <template>
   <v-alert
     class="alert-overlay"
-    v-model="alert"
-    border="start"
     closable
     :type="alertType"
     close-label="Closeable alert"
@@ -14,6 +12,7 @@
 
 <script lang="ts">
   export default {
+    name: "the-login-alert",
     props: {
       alertTitle: String,
       alertText: String,
@@ -30,6 +29,6 @@
   }
 </script>
 
-<style scoped>
+<style>
 
 </style>

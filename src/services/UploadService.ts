@@ -1,7 +1,7 @@
 import apiClient from '@/store/modules/apiClient';
 
 class UploadService {
-  async getPhotoUrl(photoId: Number): Promise<string> {
+  public async getPhotoUrl(photoId: Number): Promise<string> {
     try {
     const res = await apiClient.get('uploads/'+ photoId);
     //console.log(res.data);
