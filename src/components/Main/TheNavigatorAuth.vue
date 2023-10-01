@@ -158,7 +158,7 @@ export default{
 <style>
   #side {
     grid-area: side;
-    padding: 1rem;
+    padding: 0rem;
   }
   .rooms {
     padding-left: 0rem;

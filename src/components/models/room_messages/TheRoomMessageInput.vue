@@ -11,6 +11,7 @@
             variant="outlined"
             @input="emitMessage"
             @enter="clickMe"
+            @click:clear="$emit('update:modelValue', '')"
           >
             <template v-slot:prepend>
               <v-tooltip location="bottom">

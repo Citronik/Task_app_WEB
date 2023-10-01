@@ -4,10 +4,10 @@ class UploadService {
   public async getPhotoUrl(photoId: Number): Promise<string> {
     try {
     const res = await apiClient.get('uploads/'+ photoId);
-    //console.log(res.data);
     if (!res.data ) {
       return '';
     }
+    console.log('partial url: ' + res.data);
     const baseURL = apiClient.getUri();
     const url = baseURL.replace('/api/', '') + res.data;
     return url;

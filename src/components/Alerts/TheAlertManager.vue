@@ -13,6 +13,7 @@
   import { useAlertStore } from '@/store/AlertStore';
   import TheLoginAlert from './TheLoginAlert.vue';
   export default {
+    name: 'TheAlertManager',
     components: {
       TheLoginAlert,
     },

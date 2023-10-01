@@ -25,6 +25,6 @@ v-content {
   background-color: #BBDEFB !important;
   grid-area: v-main;
   overflow-y: auto;
-  padding: 1rem;
+  padding: 0rem;
 }
 </style>

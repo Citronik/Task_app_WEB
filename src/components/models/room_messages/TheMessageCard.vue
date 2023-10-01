@@ -5,7 +5,7 @@
     </div>
     <v-container class="chat-component__messages">
       <v-row v-for="message in messages" :key="message.id" :justify="message.user_id === userStore.user.id ? 'end' : 'start'">
-        <v-col cols="6" align-self="end">
+        <v-col cols="6">
           <TheMessage
             :userId="message.user_id"
             :message="message.message"
@@ -83,6 +83,9 @@ export default {
     async sendMessage() {
       console.log('sending message')
       console.log(this.testMessage)
+      if (this.testMessage === '') {
+        return;
+      }
       this.newMessage.room_id = +this.$route.params.id;
       this.newMessage.message = this.testMessage;
       const res = await this.messageStore.createMessage(this.newMessage);
