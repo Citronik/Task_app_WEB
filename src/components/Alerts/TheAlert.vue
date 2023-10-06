@@ -12,7 +12,7 @@
 
 <script lang="ts">
   export default {
-    name: "the-login-alert",
+    name: "the-alert",
     props: {
       alertTitle: String,
       alertText: String,

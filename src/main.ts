@@ -13,13 +13,15 @@ import { createApp } from 'vue'
 // Plugins
 import { registerPlugins } from '@/plugins'
 import { createPinia } from 'pinia'
-
+import TheAlert from '@/components/Alerts/TheAlert.vue'
 
 // Add router to app
 
 const pinia = createPinia()
 
 const app = createApp(App)
+
+app.component('app-alert', TheAlert)
 
 registerPlugins(app)
 

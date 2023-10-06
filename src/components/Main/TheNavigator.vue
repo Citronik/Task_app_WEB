@@ -1,5 +1,6 @@
 <template>
-  <v-toolbar app dark fixed id="toolbar">
+  <v-app-bar order="0">
+  <v-toolbar  app dark fixed id="toolbar">
     <router-link id="name" class="custom-link-style" to="/">
       <v-toolbar-title class="mr-4">PLATEFORM</v-toolbar-title>
     </router-link>
@@ -32,6 +33,7 @@
       </v-btn>
     </v-toolbar-items>
   </v-toolbar>
+</v-app-bar>
 </template>
 
 <script lang="ts">

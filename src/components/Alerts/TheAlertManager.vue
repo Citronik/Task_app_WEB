@@ -11,7 +11,7 @@
 
 <script lang="ts">
   import { useAlertStore } from '@/store/AlertStore';
-  import TheLoginAlert from './TheLoginAlert.vue';
+  import TheLoginAlert from './TheAlert.vue';
   export default {
     name: 'TheAlertManager',
     components: {

@@ -1,7 +1,7 @@
 <template>
-  <v-card class="side" v-if="authenticated">
-    <v-layout>
+
       <v-navigation-drawer
+        v-if="authenticated"
         v-model="drawer"
         :rail="rail"
         permanent
@@ -65,13 +65,7 @@
         </v-list>
         <v-divider></v-divider>
       </v-navigation-drawer>
-      <v-main style="min-height: 100vh">
 
-          <router-view></router-view>
-
-      </v-main>
-    </v-layout>
-  </v-card>
 </template>
 
 <script lang="ts">
