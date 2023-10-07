@@ -1,31 +1,41 @@
 // Composables
 import { useUserStore } from '@/store/UserStore'
-import { createRouter, createWebHistory } from 'vue-router'
+import { RouteRecordRaw, createRouter, createWebHistory } from 'vue-router'
 import { RouteLocationNormalized, NavigationGuardNext } from "vue-router";
+import NotFound from '@/views/main/NotFound.vue'
+import Room from '@/views/room/Room.vue'
+import Rooms from '@/views/room/Rooms.vue'
+import CreateRoom from '@/views/room/CreateRoom.vue'
 
-const routes = [
-  // { path: '/rooms', name: 'Rooms', component: () => import('@/views/room/Rooms.vue'),
-  //   children: [
-  //     { path: '/:id/:slug', name: 'Room', component: () => import('@/views/room/Room.vue') },
-  //   ],
-  // },
-  { path: '', name: 'Home', component: () => import('@/views/main/Home.vue') },
+const routes: RouteRecordRaw[] = [
   { path: '/login', name: 'Login', component: () => import('@/views/main/Login.vue') },
+  { path: '/', name: 'Home', component: () => import('@/views/main/Home.vue') },
   { path: '/register', name: 'Register', component: () => import('@/views/main/Registration.vue') },
   { path: '/about', name: 'About', component: () => import('@/views/main/About.vue') },
   { path: '/contact', name: 'Contact', component: () => import('@/views/main/Contact.vue') },
   { path: '/my-account', name: 'MyAccount', component: () => import('@/views/account/MyAccount.vue') },
   { path: '/my-account/edit', name: 'EditAccount', component: () => import('@/views/account/EditAccount.vue') },
   { path: '/my-account/change-password', name: 'ChangePassword', component: () => import('@/views/account/ChangePassword.vue') },
-  { path: '/rooms/create', name: 'CreateRoom', component: () => import('@/views/room/CreateRoom.vue') },
-  { path: '/rooms/:id', name: 'Room', component: () => import('@/views/room/Room.vue') },
-  { path: '/rooms/:id/edit', name: 'EditRoom', component: () => import('@/views/room/EditRoom.vue') },
+  {
+    path: '/rooms', name: 'Rooms', component: Rooms},
+  { path: '/rooms/create', name: 'createRoom', component: CreateRoom},
+      {
+        path: '/rooms/:id',
+        component: Room,
+        props: route => ({ query: route.query.room_tab })
+      },
+  { path: '/rooms/:id/edit', component: () => import('@/views/room/EditRoom.vue') },
+  { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound },
 ];
 
 /* ts-ignore */
 const router = createRouter({
   routes,
   history: createWebHistory(process.env.BASE_URL),
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) return savedPosition;
+    return { top: 0 };
+  },
 })
 
 router.beforeEach( async (to: RouteLocationNormalized,

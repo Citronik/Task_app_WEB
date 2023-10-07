@@ -58,7 +58,6 @@ export default {
     async logout() {
       console.log("logout");
       await this.userStore.signOut();
-      //this.$router.push({ name: "Home" });
       const routeUrl = this.$router.resolve({ name: 'Home' }).href;
       window.location.href = routeUrl;
     },

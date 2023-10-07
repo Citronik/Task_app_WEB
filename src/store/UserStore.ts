@@ -76,7 +76,7 @@ export const useUserStore = defineStore("user", {
       console.log('logout');
       this.err = null;
       try {
-        await apiClient.post('/users/logout');
+        //await apiClient.post('/users/logout');
         this.user = null;
         this.profile = null;
         localStorage.removeItem('userStore');
@@ -94,12 +94,12 @@ export const useUserStore = defineStore("user", {
         console.log('suc: ', res);
         return true;
       } catch (error: any) {
+        this.err = error.message;
         if (error.response?.status === 401) {
-          this.signOut();
+          //this.signOut();
           console.log('unauth: ', error.response);
           return false;
         } else {
-          this.err = error.message;
           console.log('err: ', this.err);
           return false;
         }

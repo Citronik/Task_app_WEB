@@ -1,4 +1,10 @@
 <template>
+  <app-alert
+    @dismissed="userStore.$state.err"
+    :alertText="userStore.$state.err"
+    :alertTitle="'asd'"
+    :alertType="'error'"
+    ></app-alert>
   <v-sheet id="login" class="bg-grey-lighten-2 pa-16" rounded>
     <v-card class="mx-auto px-6 py-8" max-width="400">
 

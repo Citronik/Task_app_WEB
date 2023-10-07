@@ -64,9 +64,9 @@
       color="deep-purple-accent-4"
       align-tabs="end"
     >
-      <v-tab :value="1">Overview</v-tab>
-      <v-tab :value="2">Tasks</v-tab>
-      <v-tab :value="3">Chat</v-tab>
+      <v-tab :value="1" @click="updateTabRoute('overview')">Overview</v-tab>
+      <v-tab :value="2" @click="updateTabRoute('tasks')">Tasks</v-tab>
+      <v-tab :value="3" @click="updateTabRoute('messages')">Chat</v-tab>
     </v-tabs>
     <v-window v-model="tab" style="height: 100%;">
       <v-window-item
@@ -74,6 +74,8 @@
         :key="n"
         :value="n"
       >
+        <TheRoomOverwiev v-if="n===1" />
+        <TheTasks v-if="n===2" />
         <TheMessageCard v-if="n===3" />
       </v-window-item>
     </v-window>
@@ -85,11 +87,20 @@ import { useUserStore } from "@/store/UserStore";
 import { useRoomStore } from "@/store/RoomStore";
 import { Room } from "@/models/Room";
 import uploadService from "@/services/UploadService";
-import TheMessageCard from "@/components/models/room_messages/TheMessageCard.vue";
+import TheMessageCard from "@/components/models/room/room_messages/TheMessageCard.vue";
+import TheTasks from "@/components/models/room/room_tasks/TheTasks.vue";
+import TheRoomOverwiev from "@/components/models/room/TheRoomOverview.vue";
 
 export default {
   components: {
     TheMessageCard,
+    TheTasks,
+    TheRoomOverwiev,
+  },
+  props: {
+    room_tab: {
+      type: String,
+    },
   },
   setup() {
     const userStore = useUserStore();
@@ -126,7 +137,10 @@ export default {
     },
   },
   methods: {
-
+    updateTabRoute(tabName: string) {
+      // Update the route with the "tab" parameter
+      this.$router.push({  query: { room_tab: tabName }});
+    },
   },
 }
 </script>

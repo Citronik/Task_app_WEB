@@ -21,6 +21,7 @@
 
 <script lang="ts">
   export default {
+    name: 'TheSearchBar',
     data: () => ({
       loaded: false,
       loading: false,

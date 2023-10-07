@@ -134,8 +134,6 @@ export default{
             type: "error",
           });
       }
-
-      //this.$router.push({ name: "rooms" });
     },
     enterRoom(room : Room) {
       // Handle navigation to the specific room here
