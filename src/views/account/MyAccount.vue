@@ -1,7 +1,7 @@
 <template>
   <v-container class="account-card">
-    <v-row :justify="'center'">
-      <v-col cols="4" align-self="center">
+    <v-row >
+      <v-col cols="4" align-self="start">
         <v-sheet
           rounded="xl"
           class="mx-auto text-center pa-4 rounded-xl rounded-ts-0"
@@ -11,7 +11,8 @@
           </h2>
         </v-sheet>
       </v-col>
-      <v-col>
+      <v-col cols="1" offset="6" align-self="center">
+        <TheEditAccount/>
       </v-col>
     </v-row>
     <v-row>
@@ -81,7 +82,11 @@
 <script lang="ts">
 import { useUserStore } from "@/store/UserStore";
 import { User } from "@/models/User";
+import TheEditAccount from "@/components/Main/TheEditAccount.vue";
 export default {
+  components: {
+    TheEditAccount,
+  },
   setup() {
     const userStore = useUserStore();
     userStore.initialize();
@@ -125,8 +130,14 @@ export default {
     width: 100%;
     flex-direction: column;
   }
-  v-sheet {
-    padding: 20vh;
-    background-color: #fff;
+  .v-sheet {
+    color: #ffffffc7;
+    background-color: #7593a1;
+    border: 1px solid #313131;
+  }
+  #edit-btn {
+    color: #ffffffc7;
+    background-color: #7593a1;
+    border: 1px solid #313131;
   }
 </style>

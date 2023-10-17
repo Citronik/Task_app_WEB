@@ -13,8 +13,16 @@ const routes: RouteRecordRaw[] = [
   { path: '/register', name: 'Register', component: () => import('@/views/main/Registration.vue') },
   { path: '/about', name: 'About', component: () => import('@/views/main/About.vue') },
   { path: '/contact', name: 'Contact', component: () => import('@/views/main/Contact.vue') },
-  { path: '/my-account', name: 'MyAccount', component: () => import('@/views/account/MyAccount.vue') },
-  { path: '/my-account/edit', name: 'EditAccount', component: () => import('@/views/account/EditAccount.vue') },
+  {
+    path: '/my-account',
+    name: 'MyAccount',
+    component: () => import('@/views/account/MyAccount.vue'),
+    children: [
+      {
+        path: '/my-account/edit', name: 'EditAccount', component: () => import('@/components/main/EditAccount.vue')
+      }
+    ],
+  },
   { path: '/my-account/change-password', name: 'ChangePassword', component: () => import('@/views/account/ChangePassword.vue') },
   {
     path: '/rooms', name: 'Rooms', component: Rooms},

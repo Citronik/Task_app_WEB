@@ -1,8 +1,8 @@
 <template>
-  <app-alert
+  <app-alert v-if="alertStore.$state.alerts.length > 0"
     @dismissed="userStore.$state.err"
     :alertText="userStore.$state.err"
-    :alertTitle="'asd'"
+    :alertTitle="userStore.$state.err.title"
     :alertType="'error'"
     ></app-alert>
   <v-sheet id="login" class="bg-grey-lighten-2 pa-16" rounded>

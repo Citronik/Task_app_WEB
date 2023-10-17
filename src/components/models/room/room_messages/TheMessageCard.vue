@@ -74,6 +74,7 @@ export default {
     '$route.params.id': {
       handler: async function (id: number) {
         this.messages = await this.messageStore.fetchMessages(id);
+        this.room = this.roomStore.getRoom(+this.$route.params.id);
       },
       deep: true,
       immediate: true,

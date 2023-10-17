@@ -10,7 +10,7 @@
           color="primary"
           v-bind="props"
         >
-          Open Dialog
+          Edit Profile
         </v-btn>
       </template>
       <v-card>
@@ -108,6 +108,7 @@
 
 <script lang="ts">
   export default {
+    name: "TheEditAccount",
     setup() {
       return {};
     },
