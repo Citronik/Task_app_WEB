@@ -19,7 +19,7 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/views/account/MyAccount.vue'),
     children: [
       {
-        path: '/my-account/edit', name: 'EditAccount', component: () => import('@/components/main/EditAccount.vue')
+        path: '/my-account/edit', name: 'EditAccount', component: () => import('@/components/Main/TheEditAccount.vue')
       }
     ],
   },
