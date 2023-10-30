@@ -1,5 +1,5 @@
 <template>
-  <app-alert v-if="alertStore.$state.alerts.length > 0"
+  <app-alert v-if="userStore.$state.err"
     @dismissed="userStore.$state.err"
     :alertText="userStore.$state.err"
     :alertTitle="userStore.$state.err.title"
@@ -54,13 +54,13 @@
 
 <script lang="ts">
 import { useUserStore } from "../../store/UserStore";
-import { useAlertStore } from "../../store/AlertStore";
+
   export default {
     setup() {
       const userStore = useUserStore();
-      userStore.initialize();
-      const alertStore = useAlertStore();
-      return { userStore, alertStore };
+      //userStore.initialize();
+
+      return { userStore };
     },
     data: () => ({
       loginForm: false,
@@ -97,32 +97,7 @@ import { useAlertStore } from "../../store/AlertStore";
 
         this.loading = true
 
-        setTimeout(() => (this.loading = false), 2000)
-        this.error = null;
-        const res = await this.login();
-        //console.log(res);
-
-        if (res.err) {
-          this.error = res.err;
-          this.alertStore.addNotification({
-            id: Date.now(),
-            title: "Login Error",
-            text: this.error,
-            type: "error",
-          });
-        } else {
-          this.error = null;
-          this.alertStore.addNotification({
-            id: Date.now(),
-            title: "Login Success",
-            text: "You are now logged in.",
-            type: "success",
-          });
-          //this.userStore.initialize();
-          //this.$router.push({ name: 'Home' });
-          const routeUrl = this.$router.resolve({ name: 'Home' }).href;
-          window.location.href = routeUrl;
-        }
+        await this.login();
       },
       required (v: any) {
         return !!v || 'Field is required'

@@ -40,6 +40,7 @@ export default {
   color: white;
   padding: 16px;
   font-size: xx-large;
+  position: absolute !important;
 }
 #footer .v-btn {
   color: white;

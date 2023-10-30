@@ -17,23 +17,42 @@ const routes: RouteRecordRaw[] = [
     path: '/my-account',
     name: 'MyAccount',
     component: () => import('@/views/account/MyAccount.vue'),
+    meta: { requiresAuth: true },
     children: [
       {
-        path: '/my-account/edit', name: 'EditAccount', component: () => import('@/components/Main/TheEditAccount.vue')
+        path: '/my-account/edit',
+        name: 'EditAccount',
+        component: () => import('@/components/Main/TheEditAccount.vue'),
+        meta: { requiresAuth: true },
       }
     ],
   },
-  { path: '/my-account/change-password', name: 'ChangePassword', component: () => import('@/views/account/ChangePassword.vue') },
   {
-    path: '/rooms', name: 'Rooms', component: Rooms},
-  { path: '/rooms/create', name: 'createRoom', component: CreateRoom},
-      {
-        path: '/rooms/:id',
-        component: Room,
-        props: route => ({ query: route.query.room_tab })
-      },
-  { path: '/rooms/:id/edit', component: () => import('@/views/room/EditRoom.vue') },
-  { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound },
+    path: '/my-account/change-password',
+    name: 'ChangePassword',
+    component: () => import('@/views/account/ChangePassword.vue'),
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/rooms',
+    name: 'Rooms', component: Rooms,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/rooms/create',
+    name: 'createRoom',
+    component: CreateRoom,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/rooms/:id',
+    component: Room,
+    props: route => ({ query: route.query.room_tab }),
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound
+  },
 ];
 
 /* ts-ignore */
@@ -50,25 +69,22 @@ router.beforeEach( async (to: RouteLocationNormalized,
                     from: RouteLocationNormalized,
                     next: NavigationGuardNext
                   ) => {
-  const userStore = useUserStore();
-  userStore.initialize();
-  const publicPages = ['Login', 'Register', 'Home', 'About'];
-  const authRequired = !publicPages.includes(to.name as string);
-
-  if ( authRequired ) {
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
+    const userStore = useUserStore();
+    //userStore.initialize();
+    //const publicPages = ['Login', 'Register', 'Home', 'About'];
+    //const authRequired = !publicPages.includes(to.name as string);
     try {
       const isValid = await userStore.isValidSession();
+      console.log('router validation', isValid)
       if (!isValid) {
-        next({ name: 'Login' });
-      } else {
-        //Maybe create alert!!
-        next();
+        return next({ name: 'Login' });
       }
     } catch (error) {
-      next(false);
+      console.error("Error during session validation:", error);
+      next();
     }
-  } else {
-    next();
   }
+  next();
 })
 export default router

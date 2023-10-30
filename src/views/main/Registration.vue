@@ -88,7 +88,7 @@ import { useUserStore } from "../../store/UserStore";
   export default {
     setup() {
     const userStore = useUserStore();
-    userStore.initialize();
+    //userStore.initialize();
 
     return { userStore };
   },
@@ -140,8 +140,8 @@ import { useUserStore } from "../../store/UserStore";
         console.log('register was called');
         const credentials = {
           username: this.username,
-          first_name: this.first,
-          last_name: this.last,
+          firstName: this.first,
+          lastName: this.last,
           email: this.email,
           password: this.password,
         };

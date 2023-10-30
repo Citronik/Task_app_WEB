@@ -9,13 +9,13 @@ export const useRoomStore = defineStore("room", {
   actions: {
     async fetchRooms() : Promise<any> {
       console.log('getting rooms');
-      try {
-        const res = await apiClient.get('/rooms');
-        this.rooms = res.data;
-        return { res: this.rooms };
-      } catch (error: any) {
-        return {res: null, err: error.message};
-      }
+      return await apiClient.get('/rooms')
+        .then(({ data }) => {
+          this.rooms = data;
+        })
+        .catch(() => {
+          console.error('fetch the rooms error: ');
+        });
     },
     async fetchRoom(id: number) : Promise<Room> {
       console.log('getting room');

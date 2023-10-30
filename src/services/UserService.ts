@@ -1,5 +1,5 @@
 import apiClient from '@/store/modules/apiClient';
-//import { User } from '@/models/User';
+import { User } from '@/models/User';
 import UploadService from './UploadService';
 
 class UserService {
@@ -10,14 +10,15 @@ class UserService {
     if (!res.data ) {
       return '';
     }
-    //const user: User = res.data;
     const profile = res.data.data.profile;
-    //console.log(profile);
     return await UploadService.getPhotoUrl(profile.avatar_id);
     } catch (error) {
       console.log(error);
       return '';
     }
   }
+  //async updateUserProfile(user: User): Promise<any> {
+  //
+  //}
 }
 export default new UserService();

@@ -2,13 +2,18 @@
 import { defineStore } from "pinia";
 import apiClient from '@/store/modules/apiClient';
 import { User } from '@/models/User';
+import router from "@/router";
+//import UserService from "@/services/UserService";
 
 export const useUserStore = defineStore("user", {
-  state: () => ({
-    user: null as User,
-    profile: null,
-    err: null,
-  }),
+  state: () => {
+    return {
+      user: null as User,
+      profile: null,
+      err: null,
+      token: '',
+    }
+  },
 
   actions: {
     async fetchUser() : Promise<any> {
@@ -16,6 +21,7 @@ export const useUserStore = defineStore("user", {
 
       try {
         const res = await apiClient.get('/users/me');
+        console.log(res.data);
         this.user = res.data.data;
         return this.user;
       } catch (error: any) {
@@ -39,81 +45,69 @@ export const useUserStore = defineStore("user", {
       }
     },
     async signUp(user: string) : Promise<any>{
-      try {
-        this.err = null;
-        const res = await apiClient.post('/users/register', user);
-        this.user = res.data.user;
-        localStorage.setItem('userStore', JSON.stringify(this.$state));
-        return { res:  res.data.message, err: null, status: res.data.status};
-      } catch (error: any) {
-        this.err = error.message;
-        console.log('err: ',  this.err);
-        return {res: null, err: error.message};
-      }
+      console.log('registering');
+      this.err = null;
+      return await apiClient.post('/users/register', user)
+        .then(({ data }) =>{
+          console.log(data)
+          router.push({ name: 'Login'})
+        })
+        .catch(({ error }) =>{
+          console.log(error)
+          this.err = error.message;
+        });
     },
     async signIn(credentials: { username: string; email: string; password: string }) : Promise<any> {
       console.log('logging');
       this.err = null;
-      try {
-        const res = await apiClient.post('/users/login', credentials);
-        this.user = res.data.data;
-        console.log('user: ', this.user);
-        console.log('res: ', res);
-        if (this.user) {  // if user is logged in
-          localStorage.setItem('userStore', JSON.stringify(this.$state));
-        }
-        return {res: null, err: null, message: res.data.message, status: res.data.status};
-      } catch (error: any) {
-        this.err = error.message;
-        console.log('err: ',  this.err);
-        this.user = null;
-        this.profile = null;
-        localStorage.removeItem('userStore');
-        return {res: null, err: this.err, message: this.err.message, status: "failed"};
-      }
+      return await apiClient.post('/users/login', credentials)
+        .then(({ data }) => {
+          console.log('SUC res: ', data);
+          this.user = data.user;
+          this.token = data.token.token;
+          //apiClient.defaults.headers.common['Authorization'] = `Bearer ${this.token}`
+          router.push({ name: 'Home' });
+        })
+        .catch(({ error }) =>{
+          console.error('error ocured during login: ', error);
+          this.err = error;
+        });
     },
-    async signOut() : Promise<boolean> {
+    async signOut() : Promise<any> {
       console.log('logout');
       this.err = null;
-      try {
-        //await apiClient.post('/users/logout');
-        this.user = null;
-        this.profile = null;
-        localStorage.removeItem('userStore');
-        return true;
-      } catch (error: any) {
-        this.err = error.message;
-        console.log('err: ',  this.err);
-        return false;
-        }
+      return await apiClient.post('/users/logout')
+        .then(() =>{
+          this.clearStore();
+          router.push({name: 'Login'})
+        })
+        .catch(({error}) =>{
+          console.log('LOGOGUT err: ', error);
+        });
+    },
+    clearStore() {
+      this.user = null;
+      this.profile = null;
+      this.token = '';
+      localStorage.removeItem('userStore');
     },
     async isValidSession(): Promise<boolean> {
-      try {
-        const res = await apiClient.get('/users/me');
-        this.user = res.data.data;
-        console.log('suc: ', res);
-        return true;
-      } catch (error: any) {
-        this.err = error.message;
-        if (error.response?.status === 401) {
-          //this.signOut();
-          console.log('unauth: ', error.response);
-          return false;
-        } else {
-          console.log('err: ', this.err);
-          return false;
-        }
+      if (!this.token){
+        return false;
       }
-    },
-    async initialize() {
-      const storedState = localStorage.getItem('userStore')
-      if (storedState && await this.isValidSession()) {
-        this.$patch(JSON.parse(storedState))
-      } else{
-        this.user = null;
-        this.profile = null;
-        localStorage.removeItem('userStore');
-      }
+      return true;
+      // console.log(apiClient);
+      // await apiClient.get('/users/validate')
+      //   .then(() => {
+      //     console.log("session valid");
+      //     return true;
+      //   })
+      //   .catch(({ headers, data }) => {
+      //     console.log('invalid token')
+      //     console.log(headers, data)
+      //     //this.clearStore();
+      //     return false;
+      //   });
     },
     async fetchUserByID(user_id: Number) : Promise<any> {
       console.log('getting user');
@@ -127,10 +121,27 @@ export const useUserStore = defineStore("user", {
         return {res: null, err: error.message};
       }
     },
+    async updateUser(user: User) : Promise<User> {
+      console.log('updating user');
+      try {
+        const res = await apiClient.patch('/users/update', user);
+        console.log(res);
+        this.user = res.data.data;
+        return this.user;
+      } catch (error) {
+        console.log(error);
+        //?TO-DO add error to user store
+        return null;
+      }
+    },
   },
   getters: {
     isLoggedIn(): boolean {
-      return !!this.user;
+      return !!this.token;
     }
+  },
+  persist: {
+    storage: sessionStorage,
+    paths: ['user', 'token'],
   },
 });

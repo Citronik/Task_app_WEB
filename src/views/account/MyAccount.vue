@@ -12,12 +12,25 @@
         </v-sheet>
       </v-col>
       <v-col cols="1" offset="6" align-self="center">
-        <TheEditAccount/>
+        <TheEditAccount
+          :userID="user.id"
+          :profileBio="user.bio"
+          :firstName="user.firstName"
+          :lastName="user.lastName"
+        />
+      </v-col>
+      <v-col
+          cols="12"
+        >
       </v-col>
     </v-row>
     <v-row>
       <v-col cols="1">
         <v-avatar size="150" :image="user.avatar"></v-avatar>
+      </v-col>
+      <v-col
+          cols="12"
+        >
       </v-col>
       <v-col cols="1">
         <v-sheet class="rounded-s-xl text-center">
@@ -31,6 +44,10 @@
       </v-col>
     </v-row>
     <v-row>
+      <v-col
+          cols="12"
+        >
+      </v-col>
       <v-col cols="1" >
         <v-sheet class="rounded-s-xl text-center">
           <h4>Username: </h4>
@@ -43,28 +60,36 @@
       </v-col>
     </v-row>
     <v-row>
+      <v-col
+          cols="12"
+        >
+      </v-col>
       <v-col cols="1">
         <v-sheet class="rounded-s-xl text-center">
-          <h4>First Name:: </h4>
+          <h4>First Name: </h4>
         </v-sheet>
       </v-col>
       <v-col cols="1">
         <v-sheet class="rounded-e-xl text-center">
-          <h4>{{ user.first_name }}</h4>
+          <h4>{{ user.firstName }}</h4>
         </v-sheet>
       </v-col>
       <v-col cols="1">
         <v-sheet class="rounded-s-xl text-center">
-          <h4>Last Name:: </h4>
+          <h4>Last Name: </h4>
         </v-sheet>
       </v-col>
       <v-col cols="1">
         <v-sheet class="rounded-e-xl text-center">
-          <h4>{{ user.last_name }}</h4>
+          <h4>{{ user.lastName }}</h4>
         </v-sheet>
       </v-col>
     </v-row>
     <v-row>
+      <v-col
+          cols="12"
+        >
+      </v-col>
       <v-col cols="1">
         <v-sheet class="rounded-s-xl text-center">
           <h4>Email: </h4>
@@ -89,7 +114,7 @@ export default {
   },
   setup() {
     const userStore = useUserStore();
-    userStore.initialize();
+    //userStore.initialize();
 
     return { userStore };
   },
