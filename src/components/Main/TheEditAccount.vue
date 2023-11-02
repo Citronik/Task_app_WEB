@@ -15,8 +15,9 @@
         <v-btn
           color="primary"
           v-bind="props"
+          prepend-icon="mdi-pencil"
         >
-          Edit Profile
+          Edit
         </v-btn>
       </template>
       <v-card>
@@ -34,9 +35,9 @@
                 <v-text-field
                   label="First name*"
                   hint="Input your First name"
-                  :model-value="firstName"
+                  v-model="newFirstName"
                   required
-
+                  clearable
                 ></v-text-field>
               </v-col>
               <v-col
@@ -48,8 +49,7 @@
                   label="Last name*"
                   hint="Input your Last name"
                   required
-                  :model-value="lastName"
-
+                  v-model="newLastName"
                 ></v-text-field>
               </v-col>
               <v-col
@@ -59,16 +59,17 @@
                   clearable
                   clear-icon="mdi-close-circle"
                   label="Profile Bio*"
-                  :model-value="profileBio"
-
+                  v-model="newProfileBio"
                 ></v-textarea>
               </v-col>
 
               <v-file-input
+                variant="solo"
                 :rules="fileRules"
                 accept="image/png, image/jpeg, image/bmp"
                 placeholder="Pick an avatar"
                 prepend-icon="mdi-camera"
+                @input="newAvatar"
                 label="Avatar"
               ></v-file-input>
             </v-row>
@@ -80,7 +81,7 @@
           <v-btn
             color="blue-darken-1"
             variant="text"
-            @click="dialog = false"
+            @click="dialog = !dialog"
           >
             Close
           </v-btn>
@@ -89,7 +90,7 @@
             variant="text"
             @click="updateProfile"
           >
-            Save
+            Update
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -104,21 +105,21 @@ import { useUserStore } from '@/store/UserStore';
     name: "TheEditAccount",
     setup() {
       const userStore = useUserStore();
+      const newProfileBio = userStore.user.profile?.bio || '';
+      const newFirstName = userStore.user.firstName || '';
+      const newLastName = userStore.user.lastName || '';
       return {
         userStore,
+        newProfileBio,
+        newFirstName,
+        newLastName,
       };
-    },
-    props: {
-      userID: Number,
-      profileBio: String,
-      firstName: String,
-      lastName: String,
     },
     data() {
       return {
-        user: {} as User,
         dialog: false,
         error: false,
+        newAvatar: [] as File[],
         rules: {
           firstNames: (value: string) => {
             const pattern = /^[a-zA-Z]+$/
@@ -130,29 +131,23 @@ import { useUserStore } from '@/store/UserStore';
           },
         },
         fileRules: [
-          (file: File) => {
-            return !file || file.size < 2000000 || 'Avatar size should be less than 2 MB!';
+          (file: File[]) => {
+            return !file || !file.length || file[0].size < 10000000 || 'Avatar size should be less than 10 MB!';
           },
         ],
       };
     },
     methods: {
       async updateProfile() {
-        this.user.id = this.userID;
-        this.user.profile.bio = this.profileBio;
-        this.user.firstName = this.firstName;
-        this.user.lastName = this.lastName;
-        console.log(this.user);
-        const returnedUser = await this.userStore.updateUser(this.user);
-        console.log(returnedUser);
-        if (returnedUser) {
-          this.dialog = false;
-          return;
-        }
-        this.error = true;
-        //?TO-DO add error to user store
-        console.log('error');
-
+        const user = new User();
+        user.profile.bio = this.newProfileBio;
+        user.firstName = this.newFirstName;
+        user.lastName = this.newLastName;
+        console.log('1 editAccount user: ', user);
+        user.profile.avatar = this.newAvatar[0];
+        console.log('2 editAccount user: ', user);
+        await this.userStore.updateUser(user);
+        this.dialog = false;
       }
     },
   }

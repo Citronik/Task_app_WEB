@@ -1,6 +1,6 @@
 <template>
   <v-navigation-drawer
-    v-if="!!userStore.token"
+    v-if="!!userStore.isValidSession"
     v-model="drawer"
     :rail="rail"
     permanent
@@ -27,9 +27,9 @@
       <v-list-item prepend-icon="mdi-home-city" active-color="primary" title="Home" value="home" to="/"></v-list-item>
       <v-list-item prepend-icon="mdi-account" active-color="primary" title="My Account" value="account" to="/my-account"></v-list-item>
       <v-sheet
-            border
-            rounded
-          >
+        border
+        rounded
+      >
       <v-list-group value="Rooms" class="pl-0">
         <template v-slot:activator="{ props }">
           <v-list-item
@@ -49,8 +49,7 @@
             ></v-list-item>
           </template>
 
-
-            <v-list-item
+          <v-list-item
             v-for="room in rooms"
             :key="room.id"
             :title="room.room_name"
@@ -59,16 +58,8 @@
             prepend-icon="mdi-location-enter"
           ></v-list-item>
 
-          <v-list-item
-            active-color="primary"
-            title="Create"
-            class="create-room"
-            @click="createRoom()"
-            prepend-icon="mdi-home-plus-outline"
-          >
-          </v-list-item>
-
         </v-list-group>
+          <TheCreateRoom />
       </v-list-group>
     </v-sheet>
     </v-list>
@@ -82,8 +73,13 @@
   import { useRoomStore } from "@/store/RoomStore";
   import { useAlertStore } from '@/store/AlertStore';
   import { Room } from '@/models/Room';
+  import TheCreateRoom from '@/components/models/room/TheCreateRoom.vue';
 
 export default{
+  name: "TheNavigatorAuth",
+  components: {
+    TheCreateRoom,
+  },
   setup() {
     const userStore = useUserStore();
     const roomStore = useRoomStore();

@@ -19,15 +19,14 @@ export const useUserStore = defineStore("user", {
     async fetchUser() : Promise<any> {
       console.log('getting user');
 
-      try {
-        const res = await apiClient.get('/users/me');
-        console.log(res.data);
-        this.user = res.data.data;
-        return this.user;
-      } catch (error: any) {
-        this.err = error.message;
-        return {res: null, err: error.message};
-      }
+      return await apiClient.get('/users/me')
+        .then(({ data }) => {
+          console.log('fetchUser:', data)
+          this.user = data.data;
+        })
+        .catch(({ data }) => {
+          console.error('fetchUser err: ', data);
+        });
     },
     async fetchProfile() : Promise<any>{
       console.log('getting profile');
@@ -121,18 +120,22 @@ export const useUserStore = defineStore("user", {
         return {res: null, err: error.message};
       }
     },
-    async updateUser(user: User) : Promise<User> {
+    async updateUser(user: User) : Promise<any> {
       console.log('updating user');
-      try {
-        const res = await apiClient.patch('/users/update', user);
-        console.log(res);
-        this.user = res.data.data;
-        return this.user;
-      } catch (error) {
-        console.log(error);
-        //?TO-DO add error to user store
-        return null;
-      }
+      const data = {
+        firstName: user.firstName,
+        lastName: user.lastName,
+        file: user.profile.avatar,
+        bio: user.profile.bio,
+      };
+      return await apiClient.patch('/users/update', data)
+        .then(({ data }) => {
+          console.log('updateUser:', data)
+          this.user = data.data;
+        })
+        .catch(({ data }) => {
+          console.error('updateUser err: ', data);
+        });
     },
   },
   getters: {
