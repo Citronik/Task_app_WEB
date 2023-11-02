@@ -3,17 +3,17 @@ import { defineStore } from "pinia";
 import apiClient from '@/store/modules/apiClient';
 import { User } from '@/models/User';
 import router from "@/router";
+import UserService from "@/services/UserService";
 //import UserService from "@/services/UserService";
 
 export const useUserStore = defineStore("user", {
-  state: () => {
-    return {
+  state: () => ({
       user: null as User,
       profile: null,
+      profilePicture: '/anonymous-avatar-icon-25.jpg',
       err: null,
       token: '',
-    }
-  },
+  }),
 
   actions: {
     async fetchUser() : Promise<any> {
@@ -25,6 +25,7 @@ export const useUserStore = defineStore("user", {
           this.user = data.data;
         })
         .catch(({ data }) => {
+          // add alert to alertStore
           console.error('fetchUser err: ', data);
         });
     },
@@ -39,6 +40,7 @@ export const useUserStore = defineStore("user", {
         localStorage.setItem('userStore', JSON.stringify(this.$state));
         return this.user;
       } catch (error: any) {
+        // add alert to alertStore
         this.err = error.message;
         return {res: null, err: error.message};
       }
@@ -54,6 +56,7 @@ export const useUserStore = defineStore("user", {
         .catch(({ error }) =>{
           console.log(error)
           this.err = error.message;
+          // add alert to alertStore
         });
     },
     async signIn(credentials: { username: string; email: string; password: string }) : Promise<any> {
@@ -69,6 +72,7 @@ export const useUserStore = defineStore("user", {
         })
         .catch(({ error }) =>{
           console.error('error ocured during login: ', error);
+          // add alert to alertStore
           this.err = error;
         });
     },
@@ -82,6 +86,7 @@ export const useUserStore = defineStore("user", {
         })
         .catch(({error}) =>{
           console.log('LOGOGUT err: ', error);
+          // add alert to alertStore
         });
     },
     clearStore() {
@@ -92,21 +97,22 @@ export const useUserStore = defineStore("user", {
     },
     async isValidSession(): Promise<boolean> {
       if (!this.token){
+        console.log('sessionNotValid');
+        // add alert to alertStore
         return false;
       }
-      return true;
-      // console.log(apiClient);
-      // await apiClient.get('/users/validate')
-      //   .then(() => {
-      //     console.log("session valid");
-      //     return true;
-      //   })
-      //   .catch(({ headers, data }) => {
-      //     console.log('invalid token')
-      //     console.log(headers, data)
-      //     //this.clearStore();
-      //     return false;
-      //   });
+      return await apiClient.get('/users/validate')
+        .then(() => {
+          console.log("session valid");
+          return true;
+        })
+        .catch(({ headers, data }) => {
+          console.log('invalid token')
+          console.log(headers, data)
+          this.clearStore();
+          // add alert to alertStore
+          return false;
+        });
     },
     async fetchUserByID(user_id: Number) : Promise<any> {
       console.log('getting user');
@@ -135,7 +141,12 @@ export const useUserStore = defineStore("user", {
         })
         .catch(({ data }) => {
           console.error('updateUser err: ', data);
+          // add alert to alertStore
         });
+    },
+    async getUserFotoUrl() : Promise<any> {
+      this.profilePicture = await UserService.getUserPhoto(this.user.id);
+      this.user.avatar = this.profilePicture;
     },
   },
   getters: {

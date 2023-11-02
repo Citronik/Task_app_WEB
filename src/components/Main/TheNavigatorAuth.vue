@@ -1,6 +1,5 @@
 <template>
   <v-navigation-drawer
-    v-if="!!userStore.isValidSession"
     v-model="drawer"
     :rail="rail"
     permanent
@@ -59,7 +58,9 @@
           ></v-list-item>
 
         </v-list-group>
-          <TheCreateRoom />
+
+        <TheCreateRoom/>
+
       </v-list-group>
     </v-sheet>
     </v-list>
@@ -84,33 +85,33 @@ export default{
     const userStore = useUserStore();
     const roomStore = useRoomStore();
     const alertStore = useAlertStore();
-    return { userStore, roomStore, alertStore };
+    const drawer = userStore.isLoggedIn;
+    return { userStore, roomStore, alertStore, drawer };
   },
   data() {
     return {
-      username: "",
-      avatar: "",
-      drawer: true,
+      username: "Anonymous",
+      avatar: "/anonymous-avatar-icon-25.jpg",
       rail: false,
       rooms: [] as Room[],
       open: ["Rooms"],
     };
   },
   async mounted() {
-    this.userStore.fetchUser();
-    this.userStore.fetchProfile();
-    this.username = this.userStore.user?.username || "Anonymous";
-    this.avatar = this.userStore.profile?.avatar ? import.meta.env.VITE_API_URL + "uploads/" +
-      this.userStore.profile?.avatar.file.name : "/anonymous-avatar-icon-25.jpg";
-    await this.roomStore.fetchRooms();
+
   },
   watch: {
-    userStore: {
+    "userStore.isLoggedIn": {
       deep: true,
-      handler() {
-        this.username = this.userStore.user?.username || "Anonymous";
-        this.avatar = this.userStore.profile?.avatar ? import.meta.env.VITE_API_URL + "uploads/" +
-         this.userStore.profile?.avatar.file.name : "/anonymous-avatar-icon-25.jpg";
+      immediate: true,
+      async handler(isValidSession) {
+        if (isValidSession) {
+          this.drawer = this.userStore.isLoggedIn
+          await this.userStore.getUserFotoUrl();
+          this.username = this.userStore.user?.username || "Anonymous";
+          this.avatar = this.userStore.user?.avatar || "/anonymous-avatar-icon-25.jpg";
+          await this.roomStore.fetchRooms();
+        }
       },
     },
     "roomStore.rooms": {

@@ -1,18 +1,18 @@
 <template>
-  <v-row justify="center">
+  <v-list-item>
     <v-dialog
       v-model="dialog"
       persistent
       width="600"
     >
       <template v-slot:activator="{ props }">
-        <v-list-item
+        <v-btn
           color="primary"
           v-bind="props"
           prepend-icon="mdi-home-plus-outline"
         >
           Create
-        </v-list-item>
+        </v-btn>
       </template>
       <v-card>
         <v-card-title>
@@ -101,15 +101,15 @@
           </v-btn>
           <div class="text-center">
             <v-btn
-              :disabled="dialog"
-              :loading="dialog"
+              :disabled="dialogLoading"
+              :loading="dialogLoading"
               color="purple-darken-2"
-              @click="dialog = true"
+              @click="dialogLoading = true"
             >
               Create
             </v-btn>
             <v-dialog
-              v-model="dialog"
+              v-model="dialogLoading"
               :scrim="false"
               persistent
               width="auto"
@@ -131,12 +131,13 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-  </v-row>
+  </v-list-item>
 </template>
 <script>
   export default {
     data: () => ({
       dialog: false,
+      dialogLoading: false,
     }),
   }
 </script>

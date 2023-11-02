@@ -148,6 +148,7 @@ import { useUserStore } from '@/store/UserStore';
         console.log('2 editAccount user: ', user);
         await this.userStore.updateUser(user);
         this.dialog = false;
+        //this.$emit('updateUser');
       }
     },
   }

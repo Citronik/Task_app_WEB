@@ -12,7 +12,7 @@
         </v-sheet>
       </v-col>
       <v-col cols="1" offset="6" align-self="center">
-        <TheEditAccount/>
+        <TheEditAccount />
       </v-col>
       <v-col
           cols="12"
@@ -21,7 +21,7 @@
     </v-row>
     <v-row>
       <v-col cols="1">
-        <v-avatar size="150" :image="user.avatar"></v-avatar>
+        <v-avatar size="150" :image="userStore.profilePicture"></v-avatar>
       </v-col>
       <v-col
           cols="12"
@@ -34,7 +34,7 @@
       </v-col>
       <v-col cols="4">
         <v-sheet id="edit" class="rounded-e-xl text-center">
-          <h4>{{ user.bio }}</h4>
+          <h4>{{ userStore.user.profile.bio }}</h4>
         </v-sheet>
       </v-col>
     </v-row>
@@ -50,7 +50,7 @@
       </v-col>
       <v-col cols="1">
         <v-sheet id="edit" class="rounded-e-xl text-center">
-          <h4>{{ user.username }}</h4>
+          <h4>{{ userStore.user.username }}</h4>
         </v-sheet>
       </v-col>
     </v-row>
@@ -66,7 +66,7 @@
       </v-col>
       <v-col cols="1">
         <v-sheet id="edit" class="rounded-e-xl text-center">
-          <h4>{{ user.firstName }}</h4>
+          <h4>{{ userStore.user.firstName }}</h4>
         </v-sheet>
       </v-col>
       <v-col cols="1">
@@ -76,7 +76,7 @@
       </v-col>
       <v-col cols="1">
         <v-sheet id="edit" class="rounded-e-xl text-center">
-          <h4>{{ user.lastName }}</h4>
+          <h4>{{ userStore.user.lastName }}</h4>
         </v-sheet>
       </v-col>
     </v-row>
@@ -91,8 +91,8 @@
         </v-sheet>
       </v-col>
       <v-col cols="1">
-        <v-sheet id="edit"  class="rounded-e-xl text-center">
-          <h4>{{ user.email }}</h4>
+        <v-sheet id="edit"  class="rounded-e-xl text-center" v-model="userStore.user.email">
+          <h4>{{ userStore.user.email }}</h4>
         </v-sheet>
       </v-col>
     </v-row>
@@ -101,7 +101,6 @@
 
 <script lang="ts">
 import { useUserStore } from "@/store/UserStore";
-import { User } from "@/models/User";
 import TheEditAccount from "@/components/Main/TheEditAccount.vue";
 export default {
   components: {
@@ -111,28 +110,8 @@ export default {
     const userStore = useUserStore();
     return { userStore };
   },
-  data() {
-    return {
-      user: {} as User,
-    };
-  },
   async mounted() {
-    this.user = this.userStore.user || null;
-    this.user.profile = this.userStore.profile || null;
-    this.user.avatar = this.userStore.profile?.avatar ? import.meta.env.VITE_API_URL + "uploads/" +
-      this.userStore.profile?.avatar.file.name : "/anonymous-avatar-icon-25.jpg";
-    this.user.bio = this.userStore.profile?.bio || "No bio available";
-  },
-  watch: {
-    "userStore": {
-      deep: true,
-      handler() {
-        this.user = this.userStore.user || null;
-        this.user.avatar = this.userStore.profile?.avatar ? import.meta.env.VITE_API_URL + "uploads/" +
-          this.userStore.profile?.avatar.file.name : "/anonymous-avatar-icon-25.jpg";
-        this.user.bio = this.userStore.profile?.bio || "No bio available";
-      },
-    },
+    this.userStore.fetchUser();
   },
   methods: {},
 }
